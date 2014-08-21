@@ -1,0 +1,23 @@
+{
+    "name": "lucasmro/clearsale",
+    "description": "ClearSale Integration",
+    "keywords": ["ClearSale", "T-ClearSale", "TG-ClearSale", "A-ClearSale"],
+    "homepage": "http://github.com/lucasmro/ClearSale",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lucas Michelini Reis de Oliveira",
+            "email": "lucasmro@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable"
+    },
+    "autoload": {
+        "psr-4": { "ClearSale\\" : "src/ClearSale" }
+    }
+}
