@@ -2,6 +2,11 @@
 
 namespace ClearSale;
 
+use ClearSale\Type\Currency;
+use DateTime;
+use InvalidArgumentException;
+use XMLWriter;
+
 class Payment
 {
     const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
@@ -21,7 +26,7 @@ class Payment
     const MULTICHEQUE = 13;
     const OUTROS = 14;
 
-    private static $paymentTypes = array(
+	private static $paymentTypes = array(
         self::CARTAO_CREDITO,
         self::BOLETO_BANCARIO,
         self::DEBITO_BANCARIO,
@@ -74,7 +79,7 @@ class Payment
     public function setType($type)
     {
         if (!array_key_exists($type, self::$paymentTypes)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Invalid payment type (%s)', $type)
             );
         }
@@ -111,9 +116,9 @@ class Payment
     public function setDate($date, $isUnixTimestampFormat = false)
     {
         if (!$isUnixTimestampFormat) {
-            $datetime = new \DateTime($date);
+            $datetime = new DateTime($date);
         } else {
-            $datetime = new \DateTime();
+            $datetime = new DateTime();
             $datetime->setTimestamp($date);
         }
 
@@ -223,14 +228,14 @@ class Payment
         return $this->currency;
     }
 
-    public function setCurrency($currency)
+    public function setCurrency(Currency $currency)
     {
-        $this->currency = $currency;
+        $this->currency = $currency->toValue();
 
         return $this;
     }
 
-    public function toXML(\XMLWriter $xml)
+    public function toXML(XMLWriter $xml)
     {
         $xml->startElement("Payment");
 
@@ -273,6 +278,14 @@ class Payment
         if ($this->address) {
             $this->address->toXML($xml);
         }
+
+		if ($this->nsu) {
+            $xml->writeElement("Nsu", $this->nsu);
+		}
+
+		if ($this->currency) {
+            $xml->writeElement("Currency", $this->currency);
+		}
 
         $xml->endElement();
     }
