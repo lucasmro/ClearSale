@@ -26,7 +26,7 @@ class Payment
     const MULTICHEQUE = 13;
     const OUTROS = 14;
 
-	private static $paymentTypes = array(
+    private static $paymentTypes = array(
         self::CARTAO_CREDITO,
         self::BOLETO_BANCARIO,
         self::DEBITO_BANCARIO,
@@ -279,13 +279,13 @@ class Payment
             $this->address->toXML($xml);
         }
 
-		if ($this->nsu) {
+        if ($this->nsu) {
             $xml->writeElement("Nsu", $this->nsu);
-		}
+        }
 
-		if ($this->currency) {
+        if ($this->currency) {
             $xml->writeElement("Currency", $this->currency);
-		}
+        }
 
         $xml->endElement();
     }
