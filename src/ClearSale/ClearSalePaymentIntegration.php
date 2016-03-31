@@ -4,16 +4,6 @@ namespace ClearSale;
 
 class ClearSalePaymentIntegration extends ClearSaleIntegration
 {
-    private static $endpoints = array(
-        'staging'    => 'http://homologacao.clearsale.com.br/integracaov2/paymentintegration.asmx',
-        'production' => 'http://www.clearsale.com.br/integracaov2/paymentintegration.asmx',
-    );
-
-    public function getEndpoint()
-    {
-        return self::$endpoints[$this->getEnvironment()->getType()];
-    }
-
     /**
      * Método que atualiza o status do pedido para o status recebido no parametro statusPedido
      *
@@ -25,7 +15,7 @@ class ClearSalePaymentIntegration extends ClearSaleIntegration
     {
         $function   = 'UpdateOrderStatusID';
         $parameters = array(
-            'entityCode'   => $this->entityCode,
+            'entityCode'   => $this->getEnvironment()->getEntityCode(),
             'orderID'      => $orderId,
             'statusPedido' => $statusPedido,
         );

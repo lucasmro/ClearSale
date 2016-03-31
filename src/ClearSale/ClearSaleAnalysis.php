@@ -2,6 +2,7 @@
 
 namespace ClearSale;
 
+use ClearSale\Environment\AbstractEnvironment;
 use ClearSale\XmlEntity\Order;
 use InvalidArgumentException;
 
@@ -16,9 +17,8 @@ class ClearSaleAnalysis
         self::APROVADO,
         self::REPROVADO,
     );
-    private $entityCode;
+
     private $environment;
-    private $isDebug;
     private $clearSaleService;
     private $clearSalePaymentIntegration;
     private $packageStatusResponse;
@@ -26,20 +26,15 @@ class ClearSaleAnalysis
     /**
      * Construtor para gerar a integração com a ClearSale
      *
-     * @param string $entityCode - Código gerado pela ClearSale
-     * @param string $environment
+     * @param AbstractEnvironment $environment
      * @param bool $isDebug
      * @throws InvalidArgumentException
      */
-    public function __construct($entityCode, $environment, $isDebug = false)
+    public function __construct(AbstractEnvironment $environment)
     {
-        $this->entityCode = $entityCode;
-        $this->isDebug    = $isDebug;
-
-        $this->environment                 = new Environment($environment);
-        $this->clearSaleService            = new ClearSaleService($this->entityCode, $this->environment, $this->isDebug);
-        $this->clearSalePaymentIntegration = new ClearSalePaymentIntegration($this->entityCode, $this->environment,
-            $this->isDebug);
+        $this->environment                 = $environment;
+        $this->clearSaleService            = new ClearSaleService($environment);
+        $this->clearSalePaymentIntegration = new ClearSalePaymentIntegration($environment);
     }
 
     /**

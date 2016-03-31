@@ -6,16 +6,6 @@ use ClearSale\XmlEntity\Order;
 
 class ClearSaleService extends ClearSaleIntegration
 {
-    private static $endpoints = array(
-        'staging'    => 'http://homologacao.clearsale.com.br/integracaov2/service.asmx',
-        'production' => 'http://clearsale.com.br/integracaov2/service.asmx',
-    );
-
-    public function getEndpoint()
-    {
-        return self::$endpoints[$this->getEnvironment()->getType()];
-    }
-
     /**
      * Retorna o status de um pedido
      *
@@ -25,7 +15,7 @@ class ClearSaleService extends ClearSaleIntegration
     {
         $function   = 'GetOrderStatus';
         $parameters = array(
-            'entityCode' => $this->entityCode,
+            'entityCode' => $this->getEnvironment()->getEntityCode(),
             'orderID'    => $orderId
         );
 
@@ -46,7 +36,7 @@ class ClearSaleService extends ClearSaleIntegration
     {
         $function   = 'SendOrders';
         $parameters = array(
-            'entityCode' => $this->entityCode,
+            'entityCode' => $this->getEnvironment()->getEntityCode(),
             'xml'        => $order->toXML()
         );
 
