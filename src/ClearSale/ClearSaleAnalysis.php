@@ -2,7 +2,7 @@
 
 namespace ClearSale;
 
-use Exception;
+use ClearSale\XmlEntity\Order;
 use InvalidArgumentException;
 
 class ClearSaleAnalysis

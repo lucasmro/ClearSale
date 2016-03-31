@@ -28,7 +28,7 @@ class Item implements XmlEntityInterface
      * @param Float $value - Valor Unitário
      * @param Integer $quantity - Quantidade
      *
-     * @return \Lucasmro\ClearSale\Item
+     * @return Item
      */
     public static function create($id, $name, $value, $quantity)
     {

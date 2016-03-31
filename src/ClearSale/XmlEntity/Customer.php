@@ -8,7 +8,8 @@ use XMLWriter;
 
 class Customer implements XmlEntityInterface
 {
-    const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:s';
+    use FormatTrait;
+
     const TYPE_PESSOA_FISICA   = 1;
     const TYPE_PESSOA_JURIDICA = 2;
 
@@ -152,14 +153,7 @@ class Customer implements XmlEntityInterface
      */
     public function setBirthDate($birthDate, $isUnixTimestampFormat = false)
     {
-        if (!$isUnixTimestampFormat) {
-            $datetime = new DateTime($birthDate);
-        } else {
-            $datetime = new DateTime();
-            $datetime->setTimestamp($birthDate);
-        }
-
-        $this->birthDate = $datetime->format(self::DATE_TIME_FORMAT);
+        $this->birthDate = $this->getFormattedDate($birthDate, $isUnixTimestampFormat);
 
         return $this;
     }

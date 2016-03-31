@@ -9,7 +9,8 @@ use XMLWriter;
 
 class Payment implements XmlEntityInterface
 {
-    const DATE_TIME_FORMAT         = 'Y-m-d\TH:i:s';
+    use FormatTrait;
+
     const CARTAO_CREDITO           = 1;
     const BOLETO_BANCARIO          = 2;
     const DEBITO_BANCARIO          = 3;
@@ -112,14 +113,7 @@ class Payment implements XmlEntityInterface
      */
     public function setDate($date, $isUnixTimestampFormat = false)
     {
-        if (!$isUnixTimestampFormat) {
-            $datetime = new DateTime($date);
-        } else {
-            $datetime = new DateTime();
-            $datetime->setTimestamp($date);
-        }
-
-        $this->date = $datetime->format(self::DATE_TIME_FORMAT);
+        $this->date = $this->getFormattedDate($date, $isUnixTimestampFormat);
 
         return $this;
     }

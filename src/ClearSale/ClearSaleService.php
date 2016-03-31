@@ -2,6 +2,8 @@
 
 namespace ClearSale;
 
+use ClearSale\XmlEntity\Order;
+
 class ClearSaleService extends ClearSaleIntegration
 {
     private static $endpoints = array(

@@ -2,12 +2,13 @@
 
 namespace ClearSale\XmlEntity;
 
-use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
 
 class Order implements XmlEntityInterface
 {
+
+    use FormatTrait;
     const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
     const ECOMMERCE_B2B    = 'b2b';
     const ECOMMERCE_B2C    = 'b2c';
@@ -70,7 +71,6 @@ class Order implements XmlEntityInterface
         self::LIST_TYPE_ANIVERSARIO,
         self::LIST_TYPE_CHA_BAR_OU_CHA_PANELA,
     );
-
     private $fingerPrint;
     private $id;
     private $date;
@@ -100,10 +100,9 @@ class Order implements XmlEntityInterface
     private $shippingData;
     private $payments;
     private $items;
-
-    //private $passengers; // TODO: Not implemented
-    //private $connections; // TODO: Not implemented
-    //private $hotelReservations; // TODO: Not implemented
+    private $passengers;
+    private $connections;
+    private $hotelReservations;
 
     public function __construct()
     {
@@ -122,10 +121,14 @@ class Order implements XmlEntityInterface
      * @param Customer $shippingData
      * @param Payment[] $payments
      * @param Item[] $items
+     * @param Passenger[] $passengers
+     * @param Connection[] $connections
+     * @param HotelReservation[] $hotelReservations
      * @return Order
      */
     public static function create(FingerPrint $fingerPrint, $id, $date, $email, $totalItems, $totalOrder,
-        Customer $billingData, Customer $shippingData, $payments, $items)
+        Customer $billingData, Customer $shippingData, $payments, $items, $passengers = [], $connections = [],
+        $hotelReservations = [])
     {
         $instance = new self();
 
@@ -181,14 +184,7 @@ class Order implements XmlEntityInterface
      */
     public function setDate($date, $isUnixTimestampFormat = false)
     {
-        if (!$isUnixTimestampFormat) {
-            $datetime = new DateTime($date);
-        } else {
-            $datetime = new DateTime();
-            $datetime->setTimestamp($date);
-        }
-
-        $this->date = $datetime->format(self::DATE_TIME_FORMAT);
+        $this->date = $this->getFormattedDate($date, $isUnixTimestampFormat);
 
         return $this;
     }
@@ -497,16 +493,30 @@ class Order implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @return Payment[]
+     */
     public function getPayments()
     {
         return $this->payments;
     }
 
+    /**
+     *
+     * @param int $index
+     * @return Payment
+     */
     public function getPayment($index)
     {
         return $this->payments[$index];
     }
 
+    /**
+     *
+     * @param Payment[] $payments
+     * @return Order
+     */
     public function setPayments($payments)
     {
         foreach ($payments as $payment) {
@@ -516,6 +526,11 @@ class Order implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @param Payment $payment
+     * @return Order
+     */
     public function addPayment(Payment $payment)
     {
         $this->payments[] = $payment;
@@ -523,11 +538,20 @@ class Order implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @return Item[]
+     */
     public function getItems()
     {
         return $this->items;
     }
 
+    /**
+     *
+     * @param Item[] $items
+     * @return Order
+     */
     public function setItems($items)
     {
         foreach ($items as $item) {
@@ -537,9 +561,106 @@ class Order implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @param Item $item
+     * @return Order
+     */
     public function addItems(Item $item)
     {
         $this->items[] = $item;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return Passenger[]
+     */
+    public function getPassengers()
+    {
+        return $this->passengers;
+    }
+
+    /**
+     *
+     * @param Passenger[] $passengers
+     * @return Order
+     */
+    public function setPassengers($passengers)
+    {
+        foreach ($passengers as $passenger) {
+            $this->addPassenger($passenger);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param Passenger $passenger
+     * @return Order
+     */
+    public function addPassenger(Passenger $passenger)
+    {
+        $this->passengers[] = $passenger;
+        return $this;
+    }
+
+    /**
+     *
+     * @return Connection[]
+     */
+    public function getConnections()
+    {
+        return $this->connections;
+    }
+
+    /**
+     *
+     * @param Connection[] $connections
+     * @return Order
+     */
+    public function setConnections($connections)
+    {
+        foreach ($connections as $connection) {
+            $this->addConnection($connection);
+        }
+
+        return $this;
+    }
+
+    public function addConnection(Connection $connection)
+    {
+        $this->connections[] = $connection;
+        return $this;
+    }
+
+    /**
+     *
+     * @return HotelReservation[]
+     */
+    public function getHotelReservations()
+    {
+        return $this->hotelReservations;
+    }
+
+    /**
+     *
+     * @param HotelReservation[] $hotelReservations
+     * @return Order
+     */
+    public function setHotelReservations($hotelReservations)
+    {
+        foreach ($hotelReservations as $hotelReservation) {
+            $this->addHotelReservation($hotelReservation);
+        }
+        return $this;
+    }
+
+    public function addHotelReservation(HotelReservation $hotelReservation)
+    {
+        $this->hotelReservations[] = $hotelReservation;
 
         return $this;
     }
@@ -683,6 +804,36 @@ class Order implements XmlEntityInterface
 
             foreach ($this->items as $item) {
                 $item->toXML($xml);
+            }
+
+            $xml->endElement();
+        }
+
+        if (count($this->passengers) > 0) {
+            $xml->startElement("Passengers");
+
+            foreach ($this->passengers as $passenger) {
+                $passenger->toXML($xml);
+            }
+
+            $xml->endElement();
+        }
+
+        if (count($this->connections) > 0) {
+            $xml->startElement("Connections");
+
+            foreach ($this->connections as $connection) {
+                $connection->toXML($xml);
+            }
+
+            $xml->endElement();
+        }
+
+        if (count($this->hotelReservations) > 0) {
+            $xml->startElement("HotelReservations");
+
+            foreach ($this->hotelReservations as $hotelReservation) {
+                $hotelReservation->toXML($xml);
             }
 
             $xml->endElement();
