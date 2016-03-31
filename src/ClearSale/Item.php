@@ -2,6 +2,9 @@
 
 namespace ClearSale;
 
+use InvalidArgumentException;
+use XMLWriter;
+
 class Item
 {
     private $id;
@@ -47,7 +50,7 @@ class Item
     public function setId($id)
     {
         if (empty($id)) {
-            throw new \InvalidArgumentException('Id is empty!');
+            throw new InvalidArgumentException('Id is empty!');
         }
 
         $this->id = $id;
@@ -63,7 +66,7 @@ class Item
     public function setName($name)
     {
         if (empty($name)) {
-            throw new \InvalidArgumentException('Name is empty!');
+            throw new InvalidArgumentException('Name is empty!');
         }
 
         $this->name = $name;
@@ -71,16 +74,15 @@ class Item
         return $this;
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         return $this->value;
     }
 
     public function setValue($value)
     {
         if (!is_float($value)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid value', $value)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid value', $value));
         }
 
         $this->value = $value;
@@ -96,9 +98,7 @@ class Item
     public function setQuantity($quantity)
     {
         if (!is_int($quantity)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid quantity', $quantity)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid quantity', $quantity));
         }
 
         $this->quantity = $quantity;
@@ -114,9 +114,7 @@ class Item
     public function setGift($gift)
     {
         if (!is_bool($gift)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid gift value', $gift)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid gift value', $gift));
         }
 
         $this->isGift = $gift;
@@ -132,9 +130,7 @@ class Item
     public function setCategoryId($categoryId)
     {
         if (!is_int($categoryId)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid categoryId', $categoryId)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid categoryId', $categoryId));
         }
 
         $this->categoryId = $categoryId;
@@ -150,7 +146,7 @@ class Item
     public function setCategoryName($categoryName)
     {
         if (empty($categoryName)) {
-            throw new \InvalidArgumentException('Category name is empty!');
+            throw new InvalidArgumentException('Category name is empty!');
         }
 
         $this->categoryName = $categoryName;
@@ -158,7 +154,7 @@ class Item
         return $this;
     }
 
-    public function toXML(\XMLWriter $xml)
+    public function toXML(XMLWriter $xml)
     {
         $xml->startElement("Item");
 

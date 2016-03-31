@@ -2,9 +2,11 @@
 
 namespace ClearSale;
 
+use InvalidArgumentException;
+
 class Environment
 {
-    const STAGING = 'staging';
+    const STAGING    = 'staging';
     const PRODUCTION = 'production';
 
     private static $environments = array(
@@ -17,15 +19,14 @@ class Environment
     public function __construct($environment)
     {
         if (!in_array($environment, self::$environments)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid environment (%s)', $environment)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid environment (%s)', $environment));
         }
 
         $this->type = $environment;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 }

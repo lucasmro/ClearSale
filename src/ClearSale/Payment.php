@@ -9,22 +9,21 @@ use XMLWriter;
 
 class Payment
 {
-    const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
-
-    const CARTAO_CREDITO = 1;
-    const BOLETO_BANCARIO = 2;
-    const DEBITO_BANCARIO = 3;
+    const DATE_TIME_FORMAT         = 'Y-m-d\TH:i:s';
+    const CARTAO_CREDITO           = 1;
+    const BOLETO_BANCARIO          = 2;
+    const DEBITO_BANCARIO          = 3;
     const DEBITO_BANCARIO_DINHEIRO = 4;
-    const DEBITO_BANCARIO_CHEQUE = 5;
-    const TRANSFERENCIA_BANCARIA = 6;
-    const SEDEX_A_COBRAR = 7;
-    const CHEQUE = 8;
-    const DINHEIRO = 9;
-    const FINANCIAMENTO = 10;
-    const FATURA = 11;
-    const CUPOM = 12;
-    const MULTICHEQUE = 13;
-    const OUTROS = 14;
+    const DEBITO_BANCARIO_CHEQUE   = 5;
+    const TRANSFERENCIA_BANCARIA   = 6;
+    const SEDEX_A_COBRAR           = 7;
+    const CHEQUE                   = 8;
+    const DINHEIRO                 = 9;
+    const FINANCIAMENTO            = 10;
+    const FATURA                   = 11;
+    const CUPOM                    = 12;
+    const MULTICHEQUE              = 13;
+    const OUTROS                   = 14;
 
     private static $paymentTypes = array(
         self::CARTAO_CREDITO,
@@ -42,7 +41,6 @@ class Payment
         self::MULTICHEQUE,
         self::OUTROS,
     );
-
     private $type;
     private $sequential;
     private $date;
@@ -58,14 +56,15 @@ class Payment
 
     public function __construct()
     {
+
     }
 
     public static function create($type, $date, $amount)
     {
         $instance = new self();
 
-        $instance->$type = $type;
-        $instance->date = $date;
+        $instance->$type  = $type;
+        $instance->date   = $date;
         $instance->amount = $amount;
 
         return $instance;
@@ -79,9 +78,7 @@ class Payment
     public function setType($type)
     {
         if (!array_key_exists($type, self::$paymentTypes)) {
-            throw new InvalidArgumentException(
-                sprintf('Invalid payment type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid payment type (%s)', $type));
         }
 
         $this->type = $type;

@@ -2,21 +2,25 @@
 
 namespace ClearSale;
 
+use SoapClient;
+
 class ClearSaleConnector
 {
     private $client;
     private $endpoint;
     private $isDebug;
 
-    public function __construct($endpoint, $isDebug = false) {
+    public function __construct($endpoint, $isDebug = false)
+    {
         $this->endpoint = $endpoint;
-        $this->isDebug = $isDebug;
-        $this->client = new \SoapClient($this->endpoint . '?WSDL');
+        $this->isDebug  = $isDebug;
+        $this->client   = new SoapClient($this->endpoint . '?WSDL');
     }
 
-    public function doRequest($function, $parameters) {
+    public function doRequest($function, $parameters)
+    {
         $arguments = array($function => $parameters);
-        $options = array('location' => $this->endpoint);
+        $options   = array('location' => $this->endpoint);
 
         if ($this->isDebug) {
             // TODO: Implement log

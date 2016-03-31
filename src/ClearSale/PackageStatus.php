@@ -4,14 +4,14 @@ namespace ClearSale;
 
 class PackageStatus
 {
-    const STATUS_CODE_TRANSACAO_CONCLUIDA = '00';
-    const STATUS_CODE_USUARIO_INEXISTENTE = '01';
-    const STATUS_CODE_ERRO_VALIDACAO_XML = '02';
-    const STATUS_CODE_ERRO_TRANFORMACAO_XML = '03';
-    const STATUS_CODE_ERRO_INESPERADO = '04';
+    const STATUS_CODE_TRANSACAO_CONCLUIDA                        = '00';
+    const STATUS_CODE_USUARIO_INEXISTENTE                        = '01';
+    const STATUS_CODE_ERRO_VALIDACAO_XML                         = '02';
+    const STATUS_CODE_ERRO_TRANFORMACAO_XML                      = '03';
+    const STATUS_CODE_ERRO_INESPERADO                            = '04';
     const STATUS_CODE_PEDIDO_JA_ENVIADO_OU_NAO_ESTA_EM_REANALISE = '05';
-    const STATUS_CODE_ERRO_PLUGIN_ENTRADA = '06';
-    const STATUS_CODE_ERRO_PLUGIN_SAIDA = '07';
+    const STATUS_CODE_ERRO_PLUGIN_ENTRADA                        = '06';
+    const STATUS_CODE_ERRO_PLUGIN_SAIDA                          = '07';
 
     private $transactionId;
     private $statusCode;
@@ -31,9 +31,7 @@ class PackageStatus
 
         if ($object->Orders) {
             $this->order = new OrderReturn(
-                $object->Orders->Order->ID,
-                $object->Orders->Order->Status,
-                $object->Orders->Order->Score
+                $object->Orders->Order->ID, $object->Orders->Order->Status, $object->Orders->Order->Score
             );
         }
     }

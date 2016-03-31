@@ -2,6 +2,8 @@
 
 namespace ClearSale;
 
+use XMLWriter;
+
 class FingerPrint
 {
     private $sessionId;
@@ -23,7 +25,7 @@ class FingerPrint
         return $this;
     }
 
-    public function toXML(\XMLWriter $xml)
+    public function toXML(XMLWriter $xml)
     {
         $xml->startElement("FingerPrint");
 

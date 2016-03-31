@@ -2,14 +2,17 @@
 
 namespace ClearSale;
 
+use InvalidArgumentException;
+use XMLWriter;
+
 class Card
 {
-    const MASTERCARD = 2;
-    const VISA = 3;
-    const OUTROS = 4;
+    const MASTERCARD       = 2;
+    const VISA             = 3;
+    const OUTROS           = 4;
     const AMERICAN_EXPRESS = 5;
-    const HIPERCARD = 6;
-    const AURA = 7;
+    const HIPERCARD        = 6;
+    const AURA             = 7;
 
     private static $cards = array(
         self::MASTERCARD,
@@ -19,7 +22,6 @@ class Card
         self::HIPERCARD,
         self::AURA,
     );
-
     private $type;
     private $name;
     private $number;
@@ -29,6 +31,7 @@ class Card
 
     public function __construct()
     {
+
     }
 
     public function getType()
@@ -39,9 +42,7 @@ class Card
     public function setType($type)
     {
         if (!array_key_exists($type, self::$cards)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid type (%s)', $type));
         }
 
         $this->type = $type;
@@ -109,7 +110,7 @@ class Card
         return $this;
     }
 
-    public function toXML(\XMLWriter $xml)
+    public function toXML(XMLWriter $xml)
     {
         if ($this->number) {
             $xml->writeElement("CardNumber", $this->number);

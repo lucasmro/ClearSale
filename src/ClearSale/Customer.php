@@ -2,11 +2,14 @@
 
 namespace ClearSale;
 
+use DateTime;
+use InvalidArgumentException;
+use XMLWriter;
+
 class Customer
 {
-    const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
-
-    const TYPE_PESSOA_FISICA = 1;
+    const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:s';
+    const TYPE_PESSOA_FISICA   = 1;
     const TYPE_PESSOA_JURIDICA = 2;
 
     private static $customerTypes = array(
@@ -15,13 +18,12 @@ class Customer
     );
 
     const GENDER_MASCULINO = 'M';
-    const GENDER_FEMININO = 'F';
+    const GENDER_FEMININO  = 'F';
 
     private static $genderTypes = array(
         self::GENDER_MASCULINO,
         self::GENDER_FEMININO,
     );
-
     private $id;
     private $type;
     private $legalDocument1;
@@ -35,6 +37,7 @@ class Customer
 
     public function __construct()
     {
+
     }
 
     public static function create($id, $type, $legalDocument1, $name, Address $address, $phones)
@@ -59,7 +62,7 @@ class Customer
     public function setId($id)
     {
         if (empty($id)) {
-            throw new \InvalidArgumentException('The id value is empty!');
+            throw new InvalidArgumentException('The id value is empty!');
         }
 
         $this->id = $id;
@@ -75,9 +78,7 @@ class Customer
     public function setType($type)
     {
         if (!in_array($type, self::$customerTypes)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid type (%s)', $type));
         }
 
         $this->type = $type;
@@ -95,7 +96,7 @@ class Customer
         $legalDocument1 = preg_replace('/[^0-9]/', '', $legalDocument1);
 
         if (empty($legalDocument1)) {
-            throw new \InvalidArgumentException('LegalDocument1 is empty!');
+            throw new InvalidArgumentException('LegalDocument1 is empty!');
         }
 
         $this->legalDocument1 = $legalDocument1;
@@ -113,7 +114,7 @@ class Customer
         $legalDocument2 = preg_replace('/[^0-9]/', '', $legalDocument2);
 
         if (empty($legalDocument2)) {
-            throw new \InvalidArgumentException('LegalDocument2 is empty!');
+            throw new InvalidArgumentException('LegalDocument2 is empty!');
         }
 
         $this->legalDocument2 = $legalDocument2;
@@ -129,7 +130,7 @@ class Customer
     public function setName($name)
     {
         if (empty($name)) {
-            throw new \InvalidArgumentException('Name is empty!');
+            throw new InvalidArgumentException('Name is empty!');
         }
 
         $this->name = $name;
@@ -152,9 +153,9 @@ class Customer
     public function setBirthDate($birthDate, $isUnixTimestampFormat = false)
     {
         if (!$isUnixTimestampFormat) {
-            $datetime = new \DateTime($birthDate);
+            $datetime = new DateTime($birthDate);
         } else {
-            $datetime = new \DateTime();
+            $datetime = new DateTime();
             $datetime->setTimestamp($birthDate);
         }
 
@@ -183,9 +184,7 @@ class Customer
     public function setGender($gender)
     {
         if (!in_array($gender, self::$genderTypes)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid gender (%s)', $gender)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid gender (%s)', $gender));
         }
 
         $this->gender = $gender;
@@ -226,7 +225,7 @@ class Customer
         return $this;
     }
 
-    public function toXML(\XMLWriter $xml)
+    public function toXML(XMLWriter $xml)
     {
         if ($this->id) {
             $xml->writeElement("ID", $this->id);

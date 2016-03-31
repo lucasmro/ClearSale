@@ -2,6 +2,8 @@
 
 namespace ClearSale;
 
+use InvalidArgumentException;
+
 abstract class ClearSaleIntegration
 {
     protected $entityCode;
@@ -19,10 +21,10 @@ abstract class ClearSaleIntegration
      */
     public function __construct($entityCode, Environment $environment, $isDebug = false)
     {
-        $this->entityCode = $entityCode;
+        $this->entityCode  = $entityCode;
         $this->environment = $environment;
-        $this->isDebug = $isDebug;
-        $this->connector = new ClearSaleConnector($this->getEndpoint(), $isDebug);
+        $this->isDebug     = $isDebug;
+        $this->connector   = new ClearSaleConnector($this->getEndpoint(), $isDebug);
     }
 
     abstract public function getEndpoint();

@@ -2,9 +2,11 @@
 
 namespace ClearSale\Type;
 
+use InvalidArgumentException;
+use ReflectionClass;
+
 class Currency
 {
-
     const BRL = 986;
     const EUR = 978;
     const USD = 840;
@@ -14,10 +16,10 @@ class Currency
     public function __construct($currency)
     {
         // Get the const names for validation
-        $selfClass = new ReflectionClass ( __CLASS__ );
-        $constants = $selfClass->getConstants();
+        $selfClass  = new ReflectionClass(__CLASS__);
+        $constants  = $selfClass->getConstants();
         $constNames = array();
-        foreach ( $constants as $name => $value ) {
+        foreach ($constants as $name => $value) {
             $constNames[$name] = $value;
         }
 
@@ -29,9 +31,7 @@ class Currency
 
         // Check if the currency is valid
         if (!in_array($currency, $constNames)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid currency (%s)', $currency)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid currency (%s)', $currency));
         }
 
         $this->_currency = $currency;
@@ -46,5 +46,4 @@ class Currency
     {
         return $this->_currency;
     }
-
 }

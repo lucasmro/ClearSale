@@ -5,7 +5,7 @@ namespace ClearSale;
 class ClearSalePaymentIntegration extends ClearSaleIntegration
 {
     private static $endpoints = array(
-        'staging' => 'http://homologacao.clearsale.com.br/integracaov2/paymentintegration.asmx',
+        'staging'    => 'http://homologacao.clearsale.com.br/integracaov2/paymentintegration.asmx',
         'production' => 'http://www.clearsale.com.br/integracaov2/paymentintegration.asmx',
     );
 
@@ -23,10 +23,10 @@ class ClearSalePaymentIntegration extends ClearSaleIntegration
      */
     public function updateOrderStatusId($orderId, $statusPedido)
     {
-        $function = 'UpdateOrderStatusID';
+        $function   = 'UpdateOrderStatusID';
         $parameters = array(
-            'entityCode' => $this->entityCode,
-            'orderID' => $orderId,
+            'entityCode'   => $this->entityCode,
+            'orderID'      => $orderId,
             'statusPedido' => $statusPedido,
         );
 
@@ -38,9 +38,7 @@ class ClearSalePaymentIntegration extends ClearSaleIntegration
         $object = simplexml_load_string($xml);
 
         $orderReturn = new OrderReturn(
-            $object->ID,
-            $object->Status,
-            $object->Score
+            $object->ID, $object->Status, $object->Score
         );
 
         return $orderReturn;

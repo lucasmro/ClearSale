@@ -2,20 +2,23 @@
 
 namespace ClearSale;
 
+use DateTime;
+use InvalidArgumentException;
+use XMLWriter;
+
 class Order
 {
     const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
-
-    const ECOMMERCE_B2B = 'b2b';
-    const ECOMMERCE_B2C = 'b2c';
+    const ECOMMERCE_B2B    = 'b2b';
+    const ECOMMERCE_B2C    = 'b2c';
 
     private static $ecommerceTypes = array(
         self::ECOMMERCE_B2B,
         self::ECOMMERCE_B2C,
     );
 
-    const STATUS_NOVO = 0;
-    const STATUS_APROVADO = 9;
+    const STATUS_NOVO      = 0;
+    const STATUS_APROVADO  = 9;
     const STATUS_CANCELADO = 41;
     const STATUS_REPROVADO = 45;
 
@@ -26,16 +29,16 @@ class Order
         self::STATUS_REPROVADO,
     );
 
-    const PRODUCT_A_CLEAR_SALE = 1;
-    const PRODUCT_M_CLEAR_SALE = 2;
-    const PRODUCT_T_CLEAR_SALE = 3;
-    const PRODUCT_TG_CLEAR_SALE = 4;
-    const PRODUCT_TH_CLEAR_SALE = 5;
-    const PRODUCT_TG_LIGHT_CLEAR_SALE = 6;
-    const PRODUCT_TG_FULL_CLEAR_SALE = 7;
-    const PRODUCT_T_MONITORADO = 8;
-    const PRODUCT_SCORE_DE_FRAUDE = 9;
-    const PRODUCT_CLEAR_ID = 10;
+    const PRODUCT_A_CLEAR_SALE          = 1;
+    const PRODUCT_M_CLEAR_SALE          = 2;
+    const PRODUCT_T_CLEAR_SALE          = 3;
+    const PRODUCT_TG_CLEAR_SALE         = 4;
+    const PRODUCT_TH_CLEAR_SALE         = 5;
+    const PRODUCT_TG_LIGHT_CLEAR_SALE   = 6;
+    const PRODUCT_TG_FULL_CLEAR_SALE    = 7;
+    const PRODUCT_T_MONITORADO          = 8;
+    const PRODUCT_SCORE_DE_FRAUDE       = 9;
+    const PRODUCT_CLEAR_ID              = 10;
     const PRODUCT_ANALISE_INTERNACIONAL = 11;
 
     private static $products = array(
@@ -52,11 +55,11 @@ class Order
         self::PRODUCT_ANALISE_INTERNACIONAL,
     );
 
-    const LIST_TYPE_NAO_CADASTRADA = 1;
-    const LIST_TYPE_CHA_DE_BEBE = 2;
-    const LIST_TYPE_CASAMENTO = 3;
-    const LIST_TYPE_DESEJOS = 4;
-    const LIST_TYPE_ANIVERSARIO = 5;
+    const LIST_TYPE_NAO_CADASTRADA        = 1;
+    const LIST_TYPE_CHA_DE_BEBE           = 2;
+    const LIST_TYPE_CASAMENTO             = 3;
+    const LIST_TYPE_DESEJOS               = 4;
+    const LIST_TYPE_ANIVERSARIO           = 5;
     const LIST_TYPE_CHA_BAR_OU_CHA_PANELA = 6;
 
     private static $listTypes = array(
@@ -67,7 +70,6 @@ class Order
         self::LIST_TYPE_ANIVERSARIO,
         self::LIST_TYPE_CHA_BAR_OU_CHA_PANELA,
     );
-
     private $fingerPrint;
     private $id;
     private $date;
@@ -93,11 +95,11 @@ class Order
     private $product;
     private $listType;
     private $listId;
-
     private $billingData;
     private $shippingData;
     private $payments;
     private $items;
+
     //private $passengers; // TODO: Not implemented
     //private $connections; // TODO: Not implemented
     //private $hotelReservations; // TODO: Not implemented
@@ -107,7 +109,8 @@ class Order
 
     }
 
-    public static function create(FingerPrint $fingerPrint, $id, $date, $email, $totalItems, $totalOrder, Customer $billingData, Customer $shippingData, $payments, $items)
+    public static function create(FingerPrint $fingerPrint, $id, $date, $email, $totalItems, $totalOrder,
+        Customer $billingData, Customer $shippingData, $payments, $items)
     {
         $instance = new self();
 
@@ -164,9 +167,9 @@ class Order
     public function setDate($date, $isUnixTimestampFormat = false)
     {
         if (!$isUnixTimestampFormat) {
-            $datetime = new \DateTime($date);
+            $datetime = new DateTime($date);
         } else {
-            $datetime = new \DateTime();
+            $datetime = new DateTime();
             $datetime->setTimestamp($date);
         }
 
@@ -195,9 +198,7 @@ class Order
     public function setEcommerceType($ecommerceType)
     {
         if (!array_key_exists($ecommerceType, self::$ecommerceTypes)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid ecommerce type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid ecommerce type (%s)', $ecommerceType));
         }
 
         $this->ecommerceType = $ecommerceType;
@@ -345,9 +346,7 @@ class Order
     public function setStatus($status)
     {
         if (!array_key_exists($status, self::$statuses)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid status (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid status (%s)', $status));
         }
 
         $this->status = $status;
@@ -423,9 +422,7 @@ class Order
     public function setProduct($product)
     {
         if (!array_key_exists($product, self::$products)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid product type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid product type (%s)', $product));
         }
 
         $this->product = $product;
@@ -441,9 +438,7 @@ class Order
     public function setListType($listType)
     {
         if (!array_key_exists($listType, self::$listTypes)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid list type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid list type (%s)', $listType));
         }
 
         $this->listType = $listType;
@@ -536,7 +531,7 @@ class Order
 
     public function toXML($prettyPrint = false)
     {
-        $xml = new \XMLWriter;
+        $xml = new XMLWriter;
         $xml->openMemory();
         $xml->setIndent($prettyPrint);
 

@@ -5,7 +5,7 @@ namespace ClearSale;
 class ClearSaleService extends ClearSaleIntegration
 {
     private static $endpoints = array(
-        'staging' => 'http://homologacao.clearsale.com.br/integracaov2/service.asmx',
+        'staging'    => 'http://homologacao.clearsale.com.br/integracaov2/service.asmx',
         'production' => 'http://clearsale.com.br/integracaov2/service.asmx',
     );
 
@@ -21,10 +21,10 @@ class ClearSaleService extends ClearSaleIntegration
      */
     public function getOrderStatus($orderId)
     {
-        $function = 'GetOrderStatus';
+        $function   = 'GetOrderStatus';
         $parameters = array(
             'entityCode' => $this->entityCode,
-            'orderID' => $orderId
+            'orderID'    => $orderId
         );
 
         $response = $this->connector->doRequest($function, $parameters);
@@ -42,10 +42,10 @@ class ClearSaleService extends ClearSaleIntegration
      */
     public function sendOrders(Order $order)
     {
-        $function = 'SendOrders';
+        $function   = 'SendOrders';
         $parameters = array(
             'entityCode' => $this->entityCode,
-            'xml' => $order->toXML()
+            'xml'        => $order->toXML()
         );
 
         // TODO: Implement log -> $parameters['xml']
