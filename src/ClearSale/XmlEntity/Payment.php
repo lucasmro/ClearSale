@@ -1,13 +1,13 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
 use ClearSale\Type\Currency;
 use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
 
-class Payment
+class Payment implements XmlEntityInterface
 {
     const DATE_TIME_FORMAT         = 'Y-m-d\TH:i:s';
     const CARTAO_CREDITO           = 1;

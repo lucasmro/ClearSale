@@ -1,11 +1,11 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
 use InvalidArgumentException;
 use XMLWriter;
 
-class Phone
+class Phone implements XmlEntityInterface
 {
     const NAO_DEFINIDO = 0;
     const RESIDENCIAL  = 1;

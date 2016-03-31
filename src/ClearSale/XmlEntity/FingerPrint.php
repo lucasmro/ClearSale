@@ -1,10 +1,10 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
 use XMLWriter;
 
-class FingerPrint
+class FingerPrint implements XmlEntityInterface
 {
     private $sessionId;
 

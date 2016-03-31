@@ -1,12 +1,12 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
 use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
 
-class Customer
+class Customer implements XmlEntityInterface
 {
     const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:s';
     const TYPE_PESSOA_FISICA   = 1;

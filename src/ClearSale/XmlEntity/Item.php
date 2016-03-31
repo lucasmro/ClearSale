@@ -1,11 +1,11 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
 use InvalidArgumentException;
 use XMLWriter;
 
-class Item
+class Item implements XmlEntityInterface
 {
     private $id;
     private $name;

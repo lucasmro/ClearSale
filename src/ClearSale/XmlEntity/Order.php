@@ -1,12 +1,12 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
 use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
 
-class Order
+class Order implements XmlEntityInterface
 {
     const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
     const ECOMMERCE_B2B    = 'b2b';
@@ -70,6 +70,7 @@ class Order
         self::LIST_TYPE_ANIVERSARIO,
         self::LIST_TYPE_CHA_BAR_OU_CHA_PANELA,
     );
+
     private $fingerPrint;
     private $id;
     private $date;
@@ -109,6 +110,20 @@ class Order
 
     }
 
+    /**
+     *
+     * @param FingerPrint $fingerPrint
+     * @param int $id
+     * @param string $date
+     * @param string $email
+     * @param float $totalItems
+     * @param float $totalOrder
+     * @param Customer $billingData
+     * @param Customer $shippingData
+     * @param Payment[] $payments
+     * @param Item[] $items
+     * @return Order
+     */
     public static function create(FingerPrint $fingerPrint, $id, $date, $email, $totalItems, $totalOrder,
         Customer $billingData, Customer $shippingData, $payments, $items)
     {

@@ -1,11 +1,11 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
 use InvalidArgumentException;
 use XMLWriter;
 
-class Card
+class Card implements XmlEntityInterface
 {
     const MASTERCARD       = 2;
     const VISA             = 3;

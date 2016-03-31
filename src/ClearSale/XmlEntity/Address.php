@@ -1,11 +1,11 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
 use InvalidArgumentException;
 use XMLWriter;
 
-class Address
+class Address implements XmlEntityInterface
 {
     private $street;
     private $number;
