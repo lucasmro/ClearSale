@@ -2,6 +2,7 @@
 
 namespace ClearSale\XmlEntity;
 
+use ClearSale\Exception\RequiredFieldException;
 use InvalidArgumentException;
 use XMLWriter;
 
@@ -16,11 +17,6 @@ class Address implements XmlEntityInterface
     private $country;
     private $zipCode;
     private $reference;
-
-    public function __construct()
-    {
-
-    }
 
     public static function create($street, $number, $county, $country, $city, $state, $zipCode)
     {
@@ -183,10 +179,14 @@ class Address implements XmlEntityInterface
 
         if ($this->street) {
             $xml->writeElement("Street", $this->street);
+        } else {
+            throw new RequiredFieldException('Field Street of the Address object is required');
         }
 
         if ($this->number) {
             $xml->writeElement("Number", $this->number);
+        } else {
+            throw new RequiredFieldException('Field Number of the Address object is required');
         }
 
         if ($this->complement) {
@@ -195,14 +195,20 @@ class Address implements XmlEntityInterface
 
         if ($this->county) {
             $xml->writeElement("County", $this->county);
+        } else {
+            throw new RequiredFieldException('Field County of the Address object is required');
         }
 
         if ($this->city) {
             $xml->writeElement("City", $this->city);
+        } else {
+            throw new RequiredFieldException('Field City of the Address object is required');
         }
 
         if ($this->state) {
             $xml->writeElement("State", $this->state);
+        } else {
+            throw new RequiredFieldException('Field State of the Address object is required');
         }
 
         if ($this->country) {
@@ -211,6 +217,8 @@ class Address implements XmlEntityInterface
 
         if ($this->zipCode) {
             $xml->writeElement("ZipCode", $this->zipCode);
+        } else {
+            throw new RequiredFieldException('Field ZipCode of the Address object is required');
         }
 
         if ($this->reference) {

@@ -2,6 +2,7 @@
 
 namespace ClearSale\XmlEntity;
 
+use ClearSale\Exception\RequiredFieldException;
 use InvalidArgumentException;
 use XMLWriter;
 
@@ -134,6 +135,8 @@ class Phone implements XmlEntityInterface
 
         if ($this->type) {
             $xml->writeElement("Type", $this->type);
+        } else {
+            throw new RequiredFieldException('Field Type of the Phone object is required');
         }
 
         if ($this->ddi) {
@@ -142,10 +145,14 @@ class Phone implements XmlEntityInterface
 
         if ($this->ddd) {
             $xml->writeElement("DDD", $this->ddd);
+        } else {
+            throw new RequiredFieldException('Field DDD of the Phone object is required');
         }
 
         if ($this->number) {
             $xml->writeElement("Number", $this->number);
+        } else {
+            throw new RequiredFieldException('Field Number of the Phone object is required');
         }
 
         if ($this->extension) {

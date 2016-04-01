@@ -2,6 +2,7 @@
 
 namespace ClearSale\XmlEntity;
 
+use ClearSale\Exception\RequiredFieldException;
 use InvalidArgumentException;
 use XMLWriter;
 
@@ -15,18 +16,13 @@ class Item implements XmlEntityInterface
     private $categoryId;
     private $categoryName;
 
-    public function __construct()
-    {
-
-    }
-
     /**
      * Criar Item com campos obrigatórios preenchidos
      *
-     * @param String $id - Código do Produto
-     * @param String $name - Nome do Produto
-     * @param Float $value - Valor Unitário
-     * @param Integer $quantity - Quantidade
+     * @param string $id - Código do Produto
+     * @param string $name - Nome do Produto
+     * @param float $value - Valor Unitário
+     * @param integer $quantity - Quantidade
      *
      * @return Item
      */
@@ -160,18 +156,26 @@ class Item implements XmlEntityInterface
 
         if ($this->id) {
             $xml->writeElement("ID", $this->id);
+        } else {
+            throw new RequiredFieldException('Field ID of the Item object is required');
         }
 
         if ($this->name) {
             $xml->writeElement("Name", $this->name);
+        } else {
+            throw new RequiredFieldException('Field Name of the Payment object is required');
         }
 
         if ($this->value) {
             $xml->writeElement("ItemValue", $this->value);
+        } else {
+            throw new RequiredFieldException('Field ItemValue of the Payment object is required');
         }
 
         if ($this->quantity) {
             $xml->writeElement("Qty", $this->quantity);
+        } else {
+            throw new RequiredFieldException('Field Qty of the Payment object is required');
         }
 
         if ($this->isGift) {

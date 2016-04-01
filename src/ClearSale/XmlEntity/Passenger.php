@@ -2,7 +2,9 @@
 
 namespace ClearSale\XmlEntity;
 
+use ClearSale\Exception\RequiredFieldException;
 use DateTime;
+use InvalidArgumentException;
 use XMLWriter;
 
 class Passenger implements XmlEntityInterface
@@ -31,8 +33,7 @@ class Passenger implements XmlEntityInterface
     private $legalDocument;
     private $birthDate;
 
-    public static function create($name, $legalDocumentType, $legalDocument, $frequentFlyerCard = null,
-        DateTime $birthDate = null)
+    public static function create($name, $legalDocumentType, $legalDocument, DateTime $birthDate = null, $frequentFlyerCard = null)
     {
         $passenger = new self();
         $passenger
@@ -89,7 +90,7 @@ class Passenger implements XmlEntityInterface
     public function setLegalDocumentType($legalDocumentType)
     {
         if (!in_array($legalDocumentType, $this->documentTypes)) {
-            throw new \InvalidArgumentException(sprintf('Invalid document type (%s)', $legalDocumentType));
+            throw new InvalidArgumentException(sprintf('Invalid document type (%s)', $legalDocumentType));
         }
 
         $this->legalDocumentType = $legalDocumentType;
@@ -105,7 +106,7 @@ class Passenger implements XmlEntityInterface
     /**
      *
      * @param DateTime $birthDate
-     * @return \ClearSale\XmlEntity\Passenger
+     * @return Passenger
      */
     public function setBirthDate(DateTime $birthDate = null)
     {
@@ -120,6 +121,8 @@ class Passenger implements XmlEntityInterface
 
         if ($this->name) {
             $xml->writeElement('Name', $this->name);
+        } else {
+            throw new RequiredFieldException('Field Date of the Passenger object is required');
         }
 
         if ($this->frequentFlyerCard) {
@@ -128,10 +131,14 @@ class Passenger implements XmlEntityInterface
 
         if ($this->legalDocumentType) {
             $xml->writeElement('LegalDocumentType', $this->legalDocumentType);
+        } else {
+            throw new RequiredFieldException('Field LegalDocumentType of the Passenger object is required');
         }
 
         if ($this->legalDocument) {
             $xml->writeElement('LegalDocument', $this->legalDocument);
+        } else {
+            throw new RequiredFieldException('Field LegalDocument of the Passenger object is required');
         }
 
         if ($this->birthDate) {

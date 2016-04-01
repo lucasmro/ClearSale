@@ -2,6 +2,7 @@
 
 namespace ClearSale\XmlEntity;
 
+use ClearSale\Exception\RequiredFieldException;
 use ClearSale\Type\Currency;
 use DateTime;
 use InvalidArgumentException;
@@ -246,14 +247,20 @@ class Payment implements XmlEntityInterface
 
         if ($this->date) {
             $xml->writeElement("Date", $this->date->format(Order::DATE_TIME_FORMAT));
+        } else {
+            throw new RequiredFieldException('Field Date of the Payment object is required');
         }
 
         if ($this->amount) {
             $xml->writeElement("Amount", $this->amount);
+        } else {
+            throw new RequiredFieldException('Field Amount of the Payment object is required');
         }
 
         if ($this->type) {
             $xml->writeElement("PaymentTypeID", $this->type);
+        } else {
+            throw new RequiredFieldException('Field PaymentTypeID of the Payment object is required');
         }
 
         if ($this->qtyInstallments) {

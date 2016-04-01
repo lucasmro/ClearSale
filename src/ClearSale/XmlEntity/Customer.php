@@ -2,6 +2,7 @@
 
 namespace ClearSale\XmlEntity;
 
+use ClearSale\Exception\RequiredFieldException;
 use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
@@ -50,7 +51,7 @@ class Customer implements XmlEntityInterface
 
     /**
      *
-     * @var name
+     * @var string
      */
     private $name;
 
@@ -370,14 +371,20 @@ class Customer implements XmlEntityInterface
     {
         if ($this->id) {
             $xml->writeElement("ID", $this->id);
+        } else {
+            throw new RequiredFieldException('Field ID of the Customer object is required');
         }
 
         if ($this->type) {
             $xml->writeElement("Type", $this->type);
+        } else {
+            throw new RequiredFieldException('Field Type of the Customer object is required');
         }
 
         if ($this->legalDocument1) {
             $xml->writeElement("LegalDocument1", $this->legalDocument1);
+        } else {
+            throw new RequiredFieldException('Field LegalDocument1 of the Customer object is required');
         }
 
         if ($this->legalDocument2) {
@@ -386,10 +393,14 @@ class Customer implements XmlEntityInterface
 
         if ($this->name) {
             $xml->writeElement("Name", $this->name);
+        } else {
+            throw new RequiredFieldException('Field name of the Customer object is required');
         }
 
         if ($this->birthDate) {
             $xml->writeElement("BirthDate", $this->birthDate->format(Order::DATE_TIME_FORMAT));
+        } else {
+            throw new RequiredFieldException('Field BirthDate of the Customer object is required');
         }
 
         if ($this->email) {

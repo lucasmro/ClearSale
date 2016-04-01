@@ -2,6 +2,7 @@
 
 namespace ClearSale\XmlEntity;
 
+use ClearSale\Exception\RequiredFieldException;
 use DateTime;
 use XMLWriter;
 
@@ -179,14 +180,54 @@ class HotelReservation implements XmlEntityInterface
     {
         $xml->startElement('HotelReservation');
 
-        $xml->writeElement('Hotel', $this->hotel);
-        $xml->writeElement('City', $this->city);
-        $xml->writeElement('State', $this->state);
-        $xml->writeElement('Country', $this->country);
-        $xml->writeElement('ReservationDate', $this->reservationDate->format(Order::DATE_TIME_FORMAT));
-        $xml->writeElement('ReservationExpirationDate', $this->reservationExpirationDate->format(Order::DATE_TIME_FORMAT));
-        $xml->writeElement('CheckInDate', $this->checkInDate->format(Order::DATE_TIME_FORMAT));
-        $xml->writeElement('CheckOutDate', $this->checkOutDate->format(Order::DATE_TIME_FORMAT));
+        if ($this->hotel) {
+            $xml->writeElement('Hotel', $this->hotel);
+        } else {
+            throw new RequiredFieldException('Field Hotel of the HotelReservation object is required');
+        }
+
+        if ($this->city) {
+            $xml->writeElement('City', $this->city);
+        } else {
+            throw new RequiredFieldException('Field City of the HotelReservation object is required');
+        }
+
+        if ($this->state) {
+            $xml->writeElement('State', $this->state);
+        } else {
+            throw new RequiredFieldException('Field State of the HotelReservation object is required');
+        }
+
+        if ($this->country) {
+            $xml->writeElement('Country', $this->country);
+        } else {
+            throw new RequiredFieldException('Field Country of the HotelReservation object is required');
+        }
+
+        if ($this->reservationDate) {
+            $xml->writeElement('ReservationDate', $this->reservationDate->format(Order::DATE_TIME_FORMAT));
+        } else {
+            throw new RequiredFieldException('Field ReservationDate of the HotelReservation object is required');
+        }
+
+        if ($this->reservationExpirationDate) {
+            $xml->writeElement('ReservationExpirationDate',
+                $this->reservationExpirationDate->format(Order::DATE_TIME_FORMAT));
+        } else {
+            throw new RequiredFieldException('Field ReservationExpirationDate of the HotelReservation object is required');
+        }
+
+        if ($this->checkInDate) {
+            $xml->writeElement('CheckInDate', $this->checkInDate->format(Order::DATE_TIME_FORMAT));
+        } else {
+            throw new RequiredFieldException('Field CheckInDate of the HotelReservation object is required');
+        }
+
+        if ($this->checkOutDate) {
+            $xml->writeElement('CheckOutDate', $this->checkOutDate->format(Order::DATE_TIME_FORMAT));
+        } else {
+            throw new RequiredFieldException('Field CheckOutDate of the HotelReservation object is required');
+        }
 
         $xml->endElement();
     }

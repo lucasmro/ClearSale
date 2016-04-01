@@ -2,6 +2,7 @@
 
 namespace ClearSale\XmlEntity;
 
+use ClearSale\Exception\RequiredFieldException;
 use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
@@ -408,7 +409,7 @@ class Order
     /**
      *
      * @param DateTime $reservationDate
-     * @return \ClearSale\XmlEntity\Order
+     * @return Order
      */
     public function setReservationDate(DateTime $reservationDate)
     {
@@ -496,8 +497,8 @@ class Order
 
     /**
      *
-     * @param \ClearSale\XmlEntity\Customer $billingData
-     * @return \ClearSale\XmlEntity\Order
+     * @param Customer $billingData
+     * @return Order
      */
     public function setBillingData(Customer $billingData)
     {
@@ -517,8 +518,8 @@ class Order
 
     /**
      *
-     * @param \ClearSale\XmlEntity\Customer $shippingData
-     * @return \ClearSale\XmlEntity\Order
+     * @param Customer $shippingData
+     * @return Order
      */
     public function setShippingData(Customer $shippingData)
     {
@@ -711,18 +712,26 @@ class Order
 
         if ($this->fingerPrint) {
             $this->fingerPrint->toXML($xml);
+        } else {
+            throw new RequiredFieldException('Field FingerPrint of the Order object is required');
         }
 
         if ($this->id) {
             $xml->writeElement("ID", $this->id);
+        } else {
+            throw new RequiredFieldException('Field ID of the Order object is required');
         }
 
         if ($this->date) {
             $xml->writeElement("Date", $this->date->format(Order::DATE_TIME_FORMAT));
+        } else {
+            throw new RequiredFieldException('Field Date of the Order object is required');
         }
 
         if ($this->email) {
             $xml->writeElement("Email", $this->email);
+        } else {
+            throw new RequiredFieldException('Field E-mail of the Order object is required');
         }
 
         if ($this->ecommerceType) {
@@ -735,14 +744,20 @@ class Order
 
         if ($this->totalItems) {
             $xml->writeElement("TotalItems", $this->totalItems);
+        } else {
+            throw new RequiredFieldException('Field TotalItems of the Order object is required');
         }
 
         if ($this->totalOrder) {
             $xml->writeElement("TotalOrder", $this->totalOrder);
+        } else {
+            throw new RequiredFieldException('Field TotalOrder of the Order object is required');
         }
 
         if ($this->quantityInstallments) {
             $xml->writeElement("QtyInstallments", $this->quantityInstallments);
+        } else {
+            throw new RequiredFieldException('Field QtyInstallments of the Order object is required');
         }
 
         if ($this->deliveryTime) {
@@ -759,6 +774,8 @@ class Order
 
         if ($this->ip) {
             $xml->writeElement("IP", $this->ip);
+        } else {
+            throw new RequiredFieldException('Field IP of the Order object is required');
         }
 
         // TODO: ShippingType not implemented
@@ -785,6 +802,8 @@ class Order
 
         if ($this->origin) {
             $xml->writeElement("Origin", $this->origin);
+        } else {
+            throw new RequiredFieldException('Field Origin of the Order object is required');
         }
 
         if ($this->reservationDate) {
