@@ -1,16 +1,19 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
-class Phone
+use InvalidArgumentException;
+use XMLWriter;
+
+class Phone implements XmlEntityInterface
 {
     const NAO_DEFINIDO = 0;
-    const RESIDENCIAL = 1;
-    const COMERCIAL = 2;
-    const RECADOS = 3;
-    const COBRANCA = 4;
-    const TEMPORARIO = 5;
-    const CELULAR = 6;
+    const RESIDENCIAL  = 1;
+    const COMERCIAL    = 2;
+    const RECADOS      = 3;
+    const COBRANCA     = 4;
+    const TEMPORARIO   = 5;
+    const CELULAR      = 6;
 
     private static $types = array(
         self::NAO_DEFINIDO,
@@ -21,7 +24,6 @@ class Phone
         self::TEMPORARIO,
         self::CELULAR,
     );
-
     private $ddi;
     private $ddd;
     private $number;
@@ -30,6 +32,7 @@ class Phone
 
     public function __construct()
     {
+
     }
 
     public static function create($type, $ddd, $number)
@@ -53,9 +56,7 @@ class Phone
         $ddi = preg_replace('/[^0-9]/', '', $ddi);
 
         if (strlen($ddi) < 1 || strlen($ddi) > 3) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid DDI', $ddi)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid DDI', $ddi));
         }
 
         $this->ddi = $ddi;
@@ -73,9 +74,7 @@ class Phone
         $ddd = preg_replace('/[^0-9]/', '', $ddd);
 
         if (strlen($ddd) != 2) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid DDD', $ddd)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid DDD', $ddd));
         }
 
         $this->ddd = $ddd;
@@ -93,9 +92,7 @@ class Phone
         $number = preg_replace('/[^0-9]/', '', $number);
 
         if (strlen($number) != 9 && strlen($number) != 8) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid Number', $number)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid Number', $number));
         }
 
         $this->number = $number;
@@ -123,9 +120,7 @@ class Phone
     public function setType($type)
     {
         if (!array_key_exists($type, self::$types)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid type (%s)', $type));
         }
 
         $this->type = $type;
@@ -133,7 +128,7 @@ class Phone
         return $this;
     }
 
-    public function toXML(\XMLWriter $xml)
+    public function toXML(XMLWriter $xml)
     {
         $xml->startElement("Phone");
 

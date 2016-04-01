@@ -2,21 +2,23 @@
 
 namespace ClearSale;
 
+use ClearSale\Environment\AbstractEnvironment;
+use ClearSale\XmlEntity\Order;
+use InvalidArgumentException;
+
 class ClearSaleAnalysis
 {
-    const APROVADO = 'Aprovado';
+    const APROVADO             = 'Aprovado';
     const AGUARDANDO_APROVACAO = 'Aguardando aprovação';
-    const REPROVADO = 'Reprovado';
-    const ERRO = 'Erro';
+    const REPROVADO            = 'Reprovado';
+    const ERRO                 = 'Erro';
 
     private static $paymentStatus = array(
         self::APROVADO,
         self::REPROVADO,
     );
 
-    private $entityCode;
     private $environment;
-    private $isDebug;
     private $clearSaleService;
     private $clearSalePaymentIntegration;
     private $packageStatusResponse;
@@ -24,19 +26,15 @@ class ClearSaleAnalysis
     /**
      * Construtor para gerar a integração com a ClearSale
      *
-     * @param string $entityCode - Código gerado pela ClearSale
-     * @param string $environment
+     * @param AbstractEnvironment $environment
      * @param bool $isDebug
      * @throws InvalidArgumentException
      */
-    public function __construct($entityCode, $environment, $isDebug = false)
+    public function __construct(AbstractEnvironment $environment)
     {
-        $this->entityCode = $entityCode;
-        $this->isDebug = $isDebug;
-
-        $this->environment = new Environment($environment);
-        $this->clearSaleService = new ClearSaleService($this->entityCode, $this->environment, $this->isDebug);
-        $this->clearSalePaymentIntegration = new ClearSalePaymentIntegration($this->entityCode, $this->environment, $this->isDebug);
+        $this->environment                 = $environment;
+        $this->clearSaleService            = new ClearSaleService($environment);
+        $this->clearSalePaymentIntegration = new ClearSalePaymentIntegration($environment);
     }
 
     /**
@@ -58,7 +56,8 @@ class ClearSaleAnalysis
      * @param string $orderId
      * @return string
      */
-    public function getOrderStatus($orderId) {
+    public function getOrderStatus($orderId)
+    {
         $this->packageStatusResponse = $this->clearSaleService->getOrderStatus($orderId);
 
         // TODO: Implement log -> $this->packageStatusResponse->getOrder()->getStatus()
@@ -78,7 +77,7 @@ class ClearSaleAnalysis
     /**
      * Retorna os detalhes do pedido após o pedido de análise
      *
-     * @return \ClearSale\PackageStatus
+     * @return PackageStatus
      */
     public function getPackageStatus()
     {
@@ -90,26 +89,23 @@ class ClearSaleAnalysis
      *
      * @param string $orderId
      * @param string $paymentStatus
-     * @return \ClearSale\OrderReturn
+     * @return OrderReturn
      */
     public function updateOrderStatusId($orderId, $paymentStatus)
     {
         if (!in_array($paymentStatus, self::$paymentStatus)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid payment status (%s)', $paymentStatus)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid payment status (%s)', $paymentStatus));
         }
 
         return $this->clearSalePaymentIntegration->updateOrderStatusId($orderId, $paymentStatus);
     }
 
-    private function sendOrder(Order $order) {
+    private function sendOrder(Order $order)
+    {
         $packageStatus = $this->clearSaleService->sendOrders($order);
 
         if ($packageStatus->getStatusCode() != PackageStatus::STATUS_CODE_TRANSACAO_CONCLUIDA) {
-            throw new \Exception(
-                sprintf('Transaction Failed! (statusCode: %s)', $packageStatus->getStatusCode())
-            );
+            throw new \Exception(sprintf('Transaction Failed! (statusCode: %s)', $packageStatus->getStatusCode()));
         }
     }
 

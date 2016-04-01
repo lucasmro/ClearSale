@@ -1,21 +1,24 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity;
 
-class Order
+use DateTime;
+use InvalidArgumentException;
+use XMLWriter;
+
+class Order implements XmlEntityInterface
 {
     const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
-
-    const ECOMMERCE_B2B = 'b2b';
-    const ECOMMERCE_B2C = 'b2c';
+    const ECOMMERCE_B2B    = 'b2b';
+    const ECOMMERCE_B2C    = 'b2c';
 
     private static $ecommerceTypes = array(
         self::ECOMMERCE_B2B,
         self::ECOMMERCE_B2C,
     );
 
-    const STATUS_NOVO = 0;
-    const STATUS_APROVADO = 9;
+    const STATUS_NOVO      = 0;
+    const STATUS_APROVADO  = 9;
     const STATUS_CANCELADO = 41;
     const STATUS_REPROVADO = 45;
 
@@ -26,16 +29,16 @@ class Order
         self::STATUS_REPROVADO,
     );
 
-    const PRODUCT_A_CLEAR_SALE = 1;
-    const PRODUCT_M_CLEAR_SALE = 2;
-    const PRODUCT_T_CLEAR_SALE = 3;
-    const PRODUCT_TG_CLEAR_SALE = 4;
-    const PRODUCT_TH_CLEAR_SALE = 5;
-    const PRODUCT_TG_LIGHT_CLEAR_SALE = 6;
-    const PRODUCT_TG_FULL_CLEAR_SALE = 7;
-    const PRODUCT_T_MONITORADO = 8;
-    const PRODUCT_SCORE_DE_FRAUDE = 9;
-    const PRODUCT_CLEAR_ID = 10;
+    const PRODUCT_A_CLEAR_SALE          = 1;
+    const PRODUCT_M_CLEAR_SALE          = 2;
+    const PRODUCT_T_CLEAR_SALE          = 3;
+    const PRODUCT_TG_CLEAR_SALE         = 4;
+    const PRODUCT_TH_CLEAR_SALE         = 5;
+    const PRODUCT_TG_LIGHT_CLEAR_SALE   = 6;
+    const PRODUCT_TG_FULL_CLEAR_SALE    = 7;
+    const PRODUCT_T_MONITORADO          = 8;
+    const PRODUCT_SCORE_DE_FRAUDE       = 9;
+    const PRODUCT_CLEAR_ID              = 10;
     const PRODUCT_ANALISE_INTERNACIONAL = 11;
 
     private static $products = array(
@@ -52,11 +55,11 @@ class Order
         self::PRODUCT_ANALISE_INTERNACIONAL,
     );
 
-    const LIST_TYPE_NAO_CADASTRADA = 1;
-    const LIST_TYPE_CHA_DE_BEBE = 2;
-    const LIST_TYPE_CASAMENTO = 3;
-    const LIST_TYPE_DESEJOS = 4;
-    const LIST_TYPE_ANIVERSARIO = 5;
+    const LIST_TYPE_NAO_CADASTRADA        = 1;
+    const LIST_TYPE_CHA_DE_BEBE           = 2;
+    const LIST_TYPE_CASAMENTO             = 3;
+    const LIST_TYPE_DESEJOS               = 4;
+    const LIST_TYPE_ANIVERSARIO           = 5;
     const LIST_TYPE_CHA_BAR_OU_CHA_PANELA = 6;
 
     private static $listTypes = array(
@@ -67,7 +70,6 @@ class Order
         self::LIST_TYPE_ANIVERSARIO,
         self::LIST_TYPE_CHA_BAR_OU_CHA_PANELA,
     );
-
     private $fingerPrint;
     private $id;
     private $date;
@@ -93,34 +95,58 @@ class Order
     private $product;
     private $listType;
     private $listId;
-
     private $billingData;
     private $shippingData;
     private $payments;
     private $items;
-    //private $passengers; // TODO: Not implemented
-    //private $connections; // TODO: Not implemented
-    //private $hotelReservations; // TODO: Not implemented
+    private $passengers;
+    private $connections;
+    private $hotelReservations;
 
-    public function __construct()
-    {
-
-    }
-
-    public static function create(FingerPrint $fingerPrint, $id, $date, $email, $totalItems, $totalOrder, Customer $billingData, Customer $shippingData, $payments, $items)
+    /**
+     *
+     * @param FingerPrint $fingerPrint
+     * @param int $id
+     * @param DateTime $date
+     * @param string $email
+     * @param float $totalOrder
+     * @param Customer $billingData
+     * @param Customer $shippingData
+     * @param Payment $payment
+     * @param Item $item
+     * @param Passenger $passenger
+     * @param Connection $connection
+     * @param HotelReservation $hotelReservation
+     * @return Order
+     */
+    public static function create(FingerPrint $fingerPrint, $id, DateTime $date, $email, $totalOrder,
+        Customer $billingData, Customer $shippingData, Payment $payment, Item $item, Passenger $passenger = null,
+        Connection $connection = null, HotelReservation $hotelReservation = null)
     {
         $instance = new self();
 
         $instance->setFingerPrint($fingerPrint);
         $instance->setId($id);
-        $instance->setDate($date, true);
+        $instance->setDate($date);
         $instance->setEmail($email);
-        $instance->setTotalItems($totalItems);
+        $instance->setTotalItems(1);
         $instance->setTotalOrder($totalOrder);
         $instance->setBillingData($billingData);
         $instance->setShippingData($shippingData);
-        $instance->setPayments($payments);
-        $instance->setItems($items);
+        $instance->addPayment($payment);
+        $instance->addItem($item);
+
+        if (!is_null($passenger)) {
+            $instance->addPassenger($passenger);
+        }
+
+        if (!is_null($connection)) {
+            $instance->addConnection($connection);
+        }
+
+        if (!is_null($hotelReservation)) {
+            $instance->addHotelReservation($hotelReservation);
+        }
 
         return $instance;
     }
@@ -149,28 +175,23 @@ class Order
         return $this;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getDate()
     {
         return $this->date;
     }
 
     /**
-     *  Set date in format "Y-m-d" or UNIX_TIMESTAMP
      *
-     * @param string $date
-     * @param bool $isUnixTimestampFormat
-     * @return self
+     * @param DateTime $date
+     * @return Order
      */
-    public function setDate($date, $isUnixTimestampFormat = false)
+    public function setDate(DateTime $date)
     {
-        if (!$isUnixTimestampFormat) {
-            $datetime = new \DateTime($date);
-        } else {
-            $datetime = new \DateTime();
-            $datetime->setTimestamp($date);
-        }
-
-        $this->date = $datetime->format(self::DATE_TIME_FORMAT);
+        $this->date = $date;
 
         return $this;
     }
@@ -195,9 +216,7 @@ class Order
     public function setEcommerceType($ecommerceType)
     {
         if (!array_key_exists($ecommerceType, self::$ecommerceTypes)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid ecommerce type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid ecommerce type (%s)', $ecommerceType));
         }
 
         $this->ecommerceType = $ecommerceType;
@@ -345,9 +364,7 @@ class Order
     public function setStatus($status)
     {
         if (!array_key_exists($status, self::$statuses)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid status (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid status (%s)', $status));
         }
 
         $this->status = $status;
@@ -379,12 +396,21 @@ class Order
         return $this;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getReservationDate()
     {
         return $this->reservationDate;
     }
 
-    public function setReservationDate($reservationDate)
+    /**
+     *
+     * @param DateTime $reservationDate
+     * @return \ClearSale\XmlEntity\Order
+     */
+    public function setReservationDate(DateTime $reservationDate)
     {
         $this->reservationDate = $reservationDate;
 
@@ -423,9 +449,7 @@ class Order
     public function setProduct($product)
     {
         if (!array_key_exists($product, self::$products)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid product type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid product type (%s)', $product));
         }
 
         $this->product = $product;
@@ -441,9 +465,7 @@ class Order
     public function setListType($listType)
     {
         if (!array_key_exists($listType, self::$listTypes)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid list type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid list type (%s)', $listType));
         }
 
         $this->listType = $listType;
@@ -463,11 +485,20 @@ class Order
         return $this;
     }
 
+    /**
+     *
+     * @return Customer
+     */
     public function getBillingData()
     {
         return $this->billingData;
     }
 
+    /**
+     *
+     * @param \ClearSale\XmlEntity\Customer $billingData
+     * @return \ClearSale\XmlEntity\Order
+     */
     public function setBillingData(Customer $billingData)
     {
         $this->billingData = $billingData;
@@ -475,11 +506,20 @@ class Order
         return $this;
     }
 
+    /**
+     *
+     * @return Customer
+     */
     public function getShippingData()
     {
         return $this->shippingData;
     }
 
+    /**
+     *
+     * @param \ClearSale\XmlEntity\Customer $shippingData
+     * @return \ClearSale\XmlEntity\Order
+     */
     public function setShippingData(Customer $shippingData)
     {
         $this->shippingData = $shippingData;
@@ -487,16 +527,30 @@ class Order
         return $this;
     }
 
+    /**
+     *
+     * @return Payment[]
+     */
     public function getPayments()
     {
         return $this->payments;
     }
 
+    /**
+     *
+     * @param int $index
+     * @return Payment
+     */
     public function getPayment($index)
     {
         return $this->payments[$index];
     }
 
+    /**
+     *
+     * @param Payment[] $payments
+     * @return Order
+     */
     public function setPayments($payments)
     {
         foreach ($payments as $payment) {
@@ -506,6 +560,11 @@ class Order
         return $this;
     }
 
+    /**
+     *
+     * @param Payment $payment
+     * @return Order
+     */
     public function addPayment(Payment $payment)
     {
         $this->payments[] = $payment;
@@ -513,11 +572,20 @@ class Order
         return $this;
     }
 
+    /**
+     *
+     * @return Item[]
+     */
     public function getItems()
     {
         return $this->items;
     }
 
+    /**
+     *
+     * @param Item[] $items
+     * @return Order
+     */
     public function setItems($items)
     {
         foreach ($items as $item) {
@@ -527,6 +595,11 @@ class Order
         return $this;
     }
 
+    /**
+     *
+     * @param Item $item
+     * @return Order
+     */
     public function addItems(Item $item)
     {
         $this->items[] = $item;
@@ -534,9 +607,101 @@ class Order
         return $this;
     }
 
+    /**
+     *
+     * @return Passenger[]
+     */
+    public function getPassengers()
+    {
+        return $this->passengers;
+    }
+
+    /**
+     *
+     * @param Passenger[] $passengers
+     * @return Order
+     */
+    public function setPassengers($passengers)
+    {
+        foreach ($passengers as $passenger) {
+            $this->addPassenger($passenger);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param Passenger $passenger
+     * @return Order
+     */
+    public function addPassenger(Passenger $passenger)
+    {
+        $this->passengers[] = $passenger;
+        return $this;
+    }
+
+    /**
+     *
+     * @return Connection[]
+     */
+    public function getConnections()
+    {
+        return $this->connections;
+    }
+
+    /**
+     *
+     * @param Connection[] $connections
+     * @return Order
+     */
+    public function setConnections($connections)
+    {
+        foreach ($connections as $connection) {
+            $this->addConnection($connection);
+        }
+
+        return $this;
+    }
+
+    public function addConnection(Connection $connection)
+    {
+        $this->connections[] = $connection;
+        return $this;
+    }
+
+    /**
+     *
+     * @return HotelReservation[]
+     */
+    public function getHotelReservations()
+    {
+        return $this->hotelReservations;
+    }
+
+    /**
+     *
+     * @param HotelReservation[] $hotelReservations
+     * @return Order
+     */
+    public function setHotelReservations($hotelReservations)
+    {
+        foreach ($hotelReservations as $hotelReservation) {
+            $this->addHotelReservation($hotelReservation);
+        }
+        return $this;
+    }
+
+    public function addHotelReservation(HotelReservation $hotelReservation)
+    {
+        $this->hotelReservations[] = $hotelReservation;
+
+        return $this;
+    }
+
     public function toXML($prettyPrint = false)
     {
-        $xml = new \XMLWriter;
+        $xml = new XMLWriter;
         $xml->openMemory();
         $xml->setIndent($prettyPrint);
 
@@ -553,7 +718,7 @@ class Order
         }
 
         if ($this->date) {
-            $xml->writeElement("Date", $this->date);
+            $xml->writeElement("Date", $this->date->format(Order::DATE_TIME_FORMAT));
         }
 
         if ($this->email) {
@@ -623,7 +788,7 @@ class Order
         }
 
         if ($this->reservationDate) {
-            $xml->writeElement("ReservationDate", $this->reservationDate);
+            $xml->writeElement("ReservationDate", $this->reservationDate->format(Order::DATE_TIME_FORMAT));
         }
 
         if ($this->country) {
@@ -673,6 +838,36 @@ class Order
 
             foreach ($this->items as $item) {
                 $item->toXML($xml);
+            }
+
+            $xml->endElement();
+        }
+
+        if (count($this->passengers) > 0) {
+            $xml->startElement("Passengers");
+
+            foreach ($this->passengers as $passenger) {
+                $passenger->toXML($xml);
+            }
+
+            $xml->endElement();
+        }
+
+        if (count($this->connections) > 0) {
+            $xml->startElement("Connections");
+
+            foreach ($this->connections as $connection) {
+                $connection->toXML($xml);
+            }
+
+            $xml->endElement();
+        }
+
+        if (count($this->hotelReservations) > 0) {
+            $xml->startElement("HotelReservations");
+
+            foreach ($this->hotelReservations as $hotelReservation) {
+                $hotelReservation->toXML($xml);
             }
 
             $xml->endElement();

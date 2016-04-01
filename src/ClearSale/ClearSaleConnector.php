@@ -2,29 +2,32 @@
 
 namespace ClearSale;
 
+use ClearSale\Environment\AbstractEnvironment;
+use SoapClient;
+
 class ClearSaleConnector
 {
     private $client;
-    private $endpoint;
-    private $isDebug;
+    private $environment;
 
-    public function __construct($endpoint, $isDebug = false) {
-        $this->endpoint = $endpoint;
-        $this->isDebug = $isDebug;
-        $this->client = new \SoapClient($this->endpoint . '?WSDL');
+    public function __construct(AbstractEnvironment $environment)
+    {
+        $this->environment = $environment;
+        $this->client   = new SoapClient($this->environment->getWebService() . '?WSDL');
     }
 
-    public function doRequest($function, $parameters) {
+    public function doRequest($function, $parameters)
+    {
         $arguments = array($function => $parameters);
-        $options = array('location' => $this->endpoint);
+        $options   = array('location' => $this->endpoint);
 
-        if ($this->isDebug) {
+        if ($this->environment->isDebug()) {
             // TODO: Implement log
         }
 
         $response = $this->client->__soapCall($function, $arguments, $options);
 
-        if ($this->isDebug) {
+        if ($this->environment->isDebug()) {
             // TODO: Implement log
         }
 
