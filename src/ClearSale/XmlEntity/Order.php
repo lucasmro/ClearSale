@@ -2,13 +2,12 @@
 
 namespace ClearSale\XmlEntity;
 
+use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
 
 class Order implements XmlEntityInterface
 {
-
-    use FormatTrait;
     const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
     const ECOMMERCE_B2B    = 'b2b';
     const ECOMMERCE_B2C    = 'b2c';
@@ -104,44 +103,50 @@ class Order implements XmlEntityInterface
     private $connections;
     private $hotelReservations;
 
-    public function __construct()
-    {
-
-    }
-
     /**
      *
      * @param FingerPrint $fingerPrint
      * @param int $id
-     * @param string $date
+     * @param DateTime $date
      * @param string $email
-     * @param float $totalItems
      * @param float $totalOrder
      * @param Customer $billingData
      * @param Customer $shippingData
-     * @param Payment[] $payments
-     * @param Item[] $items
-     * @param Passenger[] $passengers
-     * @param Connection[] $connections
-     * @param HotelReservation[] $hotelReservations
+     * @param Payment $payment
+     * @param Item $item
+     * @param Passenger $passenger
+     * @param Connection $connection
+     * @param HotelReservation $hotelReservation
      * @return Order
      */
-    public static function create(FingerPrint $fingerPrint, $id, $date, $email, $totalItems, $totalOrder,
-        Customer $billingData, Customer $shippingData, $payments, $items, $passengers = [], $connections = [],
-        $hotelReservations = [])
+    public static function create(FingerPrint $fingerPrint, $id, DateTime $date, $email, $totalOrder,
+        Customer $billingData, Customer $shippingData, Payment $payment, Item $item, Passenger $passenger = null,
+        Connection $connection = null, HotelReservation $hotelReservation = null)
     {
         $instance = new self();
 
         $instance->setFingerPrint($fingerPrint);
         $instance->setId($id);
-        $instance->setDate($date, true);
+        $instance->setDate($date);
         $instance->setEmail($email);
-        $instance->setTotalItems($totalItems);
+        $instance->setTotalItems(1);
         $instance->setTotalOrder($totalOrder);
         $instance->setBillingData($billingData);
         $instance->setShippingData($shippingData);
-        $instance->setPayments($payments);
-        $instance->setItems($items);
+        $instance->addPayment($payment);
+        $instance->addItem($item);
+
+        if (!is_null($passenger)) {
+            $instance->addPassenger($passenger);
+        }
+
+        if (!is_null($connection)) {
+            $instance->addConnection($connection);
+        }
+
+        if (!is_null($hotelReservation)) {
+            $instance->addHotelReservation($hotelReservation);
+        }
 
         return $instance;
     }
@@ -170,21 +175,23 @@ class Order implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getDate()
     {
         return $this->date;
     }
 
     /**
-     *  Set date in format "Y-m-d" or UNIX_TIMESTAMP
      *
-     * @param string $date
-     * @param bool $isUnixTimestampFormat
-     * @return self
+     * @param DateTime $date
+     * @return Order
      */
-    public function setDate($date, $isUnixTimestampFormat = false)
+    public function setDate(DateTime $date)
     {
-        $this->date = $this->getFormattedDate($date, $isUnixTimestampFormat);
+        $this->date = $date;
 
         return $this;
     }
@@ -389,12 +396,21 @@ class Order implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getReservationDate()
     {
         return $this->reservationDate;
     }
 
-    public function setReservationDate($reservationDate)
+    /**
+     *
+     * @param DateTime $reservationDate
+     * @return \ClearSale\XmlEntity\Order
+     */
+    public function setReservationDate(DateTime $reservationDate)
     {
         $this->reservationDate = $reservationDate;
 
@@ -469,11 +485,20 @@ class Order implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @return Customer
+     */
     public function getBillingData()
     {
         return $this->billingData;
     }
 
+    /**
+     *
+     * @param \ClearSale\XmlEntity\Customer $billingData
+     * @return \ClearSale\XmlEntity\Order
+     */
     public function setBillingData(Customer $billingData)
     {
         $this->billingData = $billingData;
@@ -481,11 +506,20 @@ class Order implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @return Customer
+     */
     public function getShippingData()
     {
         return $this->shippingData;
     }
 
+    /**
+     *
+     * @param \ClearSale\XmlEntity\Customer $shippingData
+     * @return \ClearSale\XmlEntity\Order
+     */
     public function setShippingData(Customer $shippingData)
     {
         $this->shippingData = $shippingData;
@@ -684,7 +718,7 @@ class Order implements XmlEntityInterface
         }
 
         if ($this->date) {
-            $xml->writeElement("Date", $this->date);
+            $xml->writeElement("Date", $this->date->format(Order::DATE_TIME_FORMAT));
         }
 
         if ($this->email) {
@@ -754,7 +788,7 @@ class Order implements XmlEntityInterface
         }
 
         if ($this->reservationDate) {
-            $xml->writeElement("ReservationDate", $this->reservationDate);
+            $xml->writeElement("ReservationDate", $this->reservationDate->format(Order::DATE_TIME_FORMAT));
         }
 
         if ($this->country) {

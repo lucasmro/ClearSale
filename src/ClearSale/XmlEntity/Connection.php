@@ -7,18 +7,55 @@ use XMLWriter;
 
 class Connection implements XmlEntityInterface
 {
-    use FormatTrait;
-
+    /**
+     *
+     * @var string
+     */
     private $company;
+
+    /**
+     *
+     * @var string
+     */
     private $flightNumber;
+
+    /**
+     *
+     * @var DateTime
+     */
     private $flightDate;
+
+    /**
+     *
+     * @var string
+     */
     private $class;
+
+    /**
+     *
+     * @var string
+     */
     private $from;
+
+    /**
+     *
+     * @var string
+     */
     private $to;
+
+    /**
+     *
+     * @var DateTime
+     */
     private $departureDate;
+
+    /**
+     *
+     * @var DateTime
+     */
     private $arrivalDate;
 
-    public static function create($company, $flightNumber, $flightDate, $class, $from, $to, $departureDate, $arrivalDate)
+    public static function create($company, $flightNumber, DateTime $flightDate, $class, $from, $to, DateTime $departureDate, DateTime $arrivalDate)
     {
         $connection = new self();
 
@@ -35,91 +72,163 @@ class Connection implements XmlEntityInterface
         return $connection;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getCompany()
     {
         return $this->company;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getFlightNumber()
     {
         return $this->flightNumber;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getFlightDate()
     {
         return $this->flightDate;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getClass()
     {
         return $this->class;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getFrom()
     {
         return $this->from;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getTo()
     {
         return $this->to;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getDepartureDate()
     {
         return $this->departureDate;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getArrivalDate()
     {
         return $this->arrivalDate;
     }
 
+    /**
+     *
+     * @param string $company
+     * @return \ClearSale\XmlEntity\Connection
+     */
     public function setCompany($company)
     {
         $this->company = $company;
         return $this;
     }
 
+    /**
+     *
+     * @param string $flightNumber
+     * @return \ClearSale\XmlEntity\Connection
+     */
     public function setFlightNumber($flightNumber)
     {
         $this->flightNumber = $flightNumber;
         return $this;
     }
 
-    public function setFlightDate($flightDate, $isUnixTimestampFormat = false)
+    /**
+     *
+     * @param DateTime $flightDate
+     * @return \ClearSale\XmlEntity\Connection
+     */
+    public function setFlightDate(DateTime $flightDate)
     {
-        $this->flightDate = $this->getFormattedDate($flightDate, $isUnixTimestampFormat);
+        $this->flightDate = $flightDate;
 
         return $this;
     }
 
+    /**
+     *
+     * @param string $class
+     * @return \ClearSale\XmlEntity\Connection
+     */
     public function setClass($class)
     {
         $this->class = $class;
         return $this;
     }
 
+    /**
+     *
+     * @param string $from
+     * @return \ClearSale\XmlEntity\Connection
+     */
     public function setFrom($from)
     {
         $this->from = $from;
         return $this;
     }
 
+    /**
+     *
+     * @param string $to
+     * @return \ClearSale\XmlEntity\Connection
+     */
     public function setTo($to)
     {
         $this->to = $to;
         return $this;
     }
 
-    public function setDepartureDate($departureDate, $isUnixTimestampFormat = false)
+    /**
+     *
+     * @param DateTime $departureDate
+     * @return \ClearSale\XmlEntity\Connection
+     */
+    public function setDepartureDate(DateTime $departureDate)
     {
-        $this->departureDate = $this->getFormattedDate($departureDate, $isUnixTimestampFormat);
+        $this->departureDate = $departureDate;
 
         return $this;
     }
 
-    public function setArrivalDate($arrivalDate)
+    /**
+     *
+     * @param DateTime $arrivalDate
+     * @return \ClearSale\XmlEntity\Connection
+     */
+    public function setArrivalDate(DateTime $arrivalDate)
     {
         $this->arrivalDate = $arrivalDate;
         return $this;
@@ -131,12 +240,12 @@ class Connection implements XmlEntityInterface
 
         $xml->writeElement('Company', $this->company);
         $xml->writeElement('FlightNumber', $this->flightNumber);
-        $xml->writeElement('FlightDate', $this->flightDate);
+        $xml->writeElement('FlightDate', $this->flightDate->format(Order::DATE_TIME_FORMAT));
         $xml->writeElement('Class', $this->class);
         $xml->writeElement('From', $this->from);
         $xml->writeElement('To', $this->to);
-        $xml->writeElement('DepartureDate', $this->departureDate);
-        $xml->writeElement('ArrivalDate', $this->arrivalDate);
+        $xml->writeElement('DepartureDate', $this->departureDate->format(Order::DATE_TIME_FORMAT));
+        $xml->writeElement('ArrivalDate', $this->arrivalDate->format(Order::DATE_TIME_FORMAT));
 
         $xml->endElement();
     }

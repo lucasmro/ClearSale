@@ -7,8 +7,6 @@ use XMLWriter;
 
 class Passenger implements XmlEntityInterface
 {
-    use FormatTrait;
-
     private $name;
     private $frequentFlyerCard;
     private $legalDocumentType;
@@ -16,7 +14,7 @@ class Passenger implements XmlEntityInterface
     private $birthDate;
 
     public static function create($name, $legalDocumentType, $legalDocument, $frequentFlyerCard = null,
-        $birthDate = null)
+        DateTime $birthDate = null)
     {
         $passenger = new self();
         $passenger
@@ -49,6 +47,10 @@ class Passenger implements XmlEntityInterface
         return $this->legalDocument;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getBirthDate()
     {
         return $this->birthDate;
@@ -78,9 +80,14 @@ class Passenger implements XmlEntityInterface
         return $this;
     }
 
-    public function setBirthDate($birthDate = null, $isUnixTimestampFormat = false)
+    /**
+     *
+     * @param DateTime $birthDate
+     * @return \ClearSale\XmlEntity\Passenger
+     */
+    public function setBirthDate(DateTime $birthDate = null)
     {
-        $this->birthDate = $this->getFormattedDate($birthDate, $isUnixTimestampFormat);
+        $this->birthDate = $birthDate;
 
         return $this;
     }
@@ -106,7 +113,7 @@ class Passenger implements XmlEntityInterface
         }
 
         if ($this->birthDate) {
-            $xml->writeElement('BirthDate', $this->birthDate);
+            $xml->writeElement('BirthDate', $this->birthDate->format(Order::DATE_TIME_FORMAT));
         }
 
         $xml->endElement();
