@@ -1,7 +1,8 @@
 <?php
 
-namespace ClearSale\XmlEntity;
+namespace ClearSale\XmlEntity\SendOrder;
 
+use ClearSale\XmlEntity\XmlEntityInterface;
 use InvalidArgumentException;
 use XMLWriter;
 

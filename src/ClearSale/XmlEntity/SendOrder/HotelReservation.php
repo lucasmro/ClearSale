@@ -1,8 +1,9 @@
 <?php
 
-namespace ClearSale\XmlEntity;
+namespace ClearSale\XmlEntity\SendOrder;
 
 use ClearSale\Exception\RequiredFieldException;
+use ClearSale\XmlEntity\XmlEntityInterface;
 use DateTime;
 use XMLWriter;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity\Response;
 
 class OrderReturn
 {

@@ -1,8 +1,9 @@
 <?php
 
-namespace ClearSale\XmlEntity;
+namespace ClearSale\XmlEntity\SendOrder;
 
 use ClearSale\Exception\RequiredFieldException;
+use ClearSale\XmlEntity\XmlEntityInterface;
 use InvalidArgumentException;
 use XMLWriter;
 
@@ -30,11 +31,6 @@ class Phone implements XmlEntityInterface
     private $number;
     private $extension;
     private $type;
-
-    public function __construct()
-    {
-
-    }
 
     public static function create($type, $ddd, $number)
     {
@@ -133,7 +129,7 @@ class Phone implements XmlEntityInterface
     {
         $xml->startElement("Phone");
 
-        if ($this->type) {
+        if (!is_null($this->type)) {
             $xml->writeElement("Type", $this->type);
         } else {
             throw new RequiredFieldException('Field Type of the Phone object is required');

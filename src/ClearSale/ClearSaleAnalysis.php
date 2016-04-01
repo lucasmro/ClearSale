@@ -3,7 +3,9 @@
 namespace ClearSale;
 
 use ClearSale\Environment\AbstractEnvironment;
-use ClearSale\XmlEntity\Order;
+use ClearSale\XmlEntity\SendOrder\Order;
+use ClearSale\XmlEntity\Response\OrderReturn;
+use ClearSale\XmlEntity\Response\PackageStatus;
 use InvalidArgumentException;
 
 class ClearSaleAnalysis

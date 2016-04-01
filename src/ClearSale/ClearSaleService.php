@@ -2,7 +2,8 @@
 
 namespace ClearSale;
 
-use ClearSale\XmlEntity\Order;
+use ClearSale\XmlEntity\SendOrder\Order;
+use ClearSale\XmlEntity\Response\PackageStatus;
 
 class ClearSaleService extends ClearSaleIntegration
 {
