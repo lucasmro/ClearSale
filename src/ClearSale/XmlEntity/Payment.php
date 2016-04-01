@@ -9,8 +9,6 @@ use XMLWriter;
 
 class Payment implements XmlEntityInterface
 {
-    use FormatTrait;
-
     const CARTAO_CREDITO           = 1;
     const BOLETO_BANCARIO          = 2;
     const DEBITO_BANCARIO          = 3;
@@ -42,6 +40,7 @@ class Payment implements XmlEntityInterface
         self::MULTICHEQUE,
         self::OUTROS,
     );
+
     private $type;
     private $sequential;
     private $date;
@@ -55,18 +54,14 @@ class Payment implements XmlEntityInterface
     private $nsu;
     private $currency;
 
-    public function __construct()
-    {
-
-    }
-
-    public static function create($type, $date, $amount)
+    public static function create($type, DateTime $date, $amount)
     {
         $instance = new self();
 
-        $instance->$type  = $type;
-        $instance->date   = $date;
-        $instance->amount = $amount;
+        $instance
+            ->setType($type)
+            ->setDate($date)
+            ->setAmount($amount);
 
         return $instance;
     }
@@ -99,21 +94,23 @@ class Payment implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getDate()
     {
         return $this->date;
     }
 
     /**
-     * Set date in format "Y-m-d" or UNIX_TIMESTAMP
-     *
-     * @param $date
-     * @param bool $isUnixTimestampFormat
-     * @return self
+     * 
+     * @param DateTime $date
+     * @return Payment
      */
-    public function setDate($date, $isUnixTimestampFormat = false)
+    public function setDate(DateTime $date)
     {
-        $this->date = $this->getFormattedDate($date, $isUnixTimestampFormat);
+        $this->date = $date;
 
         return $this;
     }
@@ -166,11 +163,20 @@ class Payment implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @return Card
+     */
     public function getCard()
     {
         return $this->card;
     }
 
+    /**
+     *
+     * @param Card $card
+     * @return Payment
+     */
     public function setCard(Card $card)
     {
         $this->card = $card;
@@ -190,6 +196,10 @@ class Payment implements XmlEntityInterface
         return $this;
     }
 
+    /**
+     *
+     * @return Address
+     */
     public function getAddress()
     {
         return $this->address;
@@ -235,7 +245,7 @@ class Payment implements XmlEntityInterface
         }
 
         if ($this->date) {
-            $xml->writeElement("Date", $this->date);
+            $xml->writeElement("Date", $this->date->format(Order::DATE_TIME_FORMAT));
         }
 
         if ($this->amount) {
