@@ -6,7 +6,7 @@ use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
 
-class Order implements XmlEntityInterface
+class Order
 {
     const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
     const ECOMMERCE_B2B    = 'b2b';

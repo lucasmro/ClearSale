@@ -37,7 +37,7 @@ class ClearSaleService extends ClearSaleIntegration
         $function   = 'SendOrders';
         $parameters = array(
             'entityCode' => $this->getEnvironment()->getEntityCode(),
-            'xml'        => $order->toXML()
+            'xml'        => $order->toXML($this->getEnvironment()->isDebug())
         );
 
         // TODO: Implement log -> $parameters['xml']

@@ -104,6 +104,10 @@ class ClearSaleAnalysis
     {
         $packageStatus = $this->clearSaleService->sendOrders($order);
 
+        if ($this->environment->isDebug()) {
+            var_dump($packageStatus);
+        }
+
         if ($packageStatus->getStatusCode() != PackageStatus::STATUS_CODE_TRANSACAO_CONCLUIDA) {
             throw new \Exception(sprintf('Transaction Failed! (statusCode: %s)', $packageStatus->getStatusCode()));
         }

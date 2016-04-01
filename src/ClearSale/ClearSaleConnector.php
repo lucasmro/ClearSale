@@ -19,7 +19,7 @@ class ClearSaleConnector
     public function doRequest($function, $parameters)
     {
         $arguments = array($function => $parameters);
-        $options   = array('location' => $this->endpoint);
+        $options   = array('location' => $this->environment->getWebService());
 
         if ($this->environment->isDebug()) {
             // TODO: Implement log

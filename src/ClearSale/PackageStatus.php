@@ -24,6 +24,8 @@ class PackageStatus
         $xml = preg_replace('/(<\?xml[^?]+?)utf-16/i', '$1utf-8', $xml);
 
         $object = simplexml_load_string($xml);
+        // Convert SimpleXMLElement to stdClass
+        $object = json_decode(json_encode($object));
 
         $this->setTransactionId($object->TransactionID);
         $this->setStatusCode($object->StatusCode);
