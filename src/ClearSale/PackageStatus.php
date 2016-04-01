@@ -2,6 +2,14 @@
 
 namespace ClearSale;
 
+use ClearSale\Exception\InputPluginException;
+use ClearSale\Exception\OrderAlreadySentNotReanalysingException;
+use ClearSale\Exception\OutputPluginException;
+use ClearSale\Exception\UnexpectedErrorException;
+use ClearSale\Exception\UserNotFoundException;
+use ClearSale\Exception\XmlTransformException;
+use ClearSale\Exception\XmlValidationException;
+
 class PackageStatus
 {
     const STATUS_CODE_TRANSACAO_CONCLUIDA                        = '00';
@@ -27,9 +35,33 @@ class PackageStatus
         // Convert SimpleXMLElement to stdClass
         $object = json_decode(json_encode($object));
 
-        $this->setTransactionId($object->TransactionID);
         $this->setStatusCode($object->StatusCode);
-        $this->setMessage($object->Message);
+        $this->setMessage(trim($object->Message));
+
+        switch ($this->getStatusCode()) {
+            case self::STATUS_CODE_USUARIO_INEXISTENTE:
+                throw new UserNotFoundException('User with the entity code given not found', $this->getStatusCode());
+
+            case self::STATUS_CODE_ERRO_VALIDACAO_XML:
+                throw new XmlValidationException($this->getMessage(), $this->getStatusCode());
+
+            case self::STATUS_CODE_ERRO_TRANFORMACAO_XML:
+                throw new XmlTransformException($this->getMessage(), $this->getStatusCode());
+
+            case self::STATUS_CODE_ERRO_INESPERADO:
+                throw new UnexpectedErrorException($this->getMessage(), $this->getStatusCode());
+
+            case self::STATUS_CODE_PEDIDO_JA_ENVIADO_OU_NAO_ESTA_EM_REANALISE:
+                throw new OrderAlreadySentNotReanalysingException($this->getMessage(), $this->getStatusCode());
+
+            case self::STATUS_CODE_ERRO_PLUGIN_ENTRADA:
+                throw new InputPluginException($this->getMessage(), $this->getStatusCode());
+
+            case self::STATUS_CODE_ERRO_PLUGIN_SAIDA:
+                throw new OutputPluginException($this->getMessage(), $this->getStatusCode());
+        }
+
+        $this->setTransactionId($object->TransactionID);
 
         if ($object->Orders) {
             $this->order = new OrderReturn(

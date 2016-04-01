@@ -7,6 +7,24 @@ use XMLWriter;
 
 class Passenger implements XmlEntityInterface
 {
+    const DOCUMENT_TYPE_CPF            = 1;
+    const DOCUMENT_TYPE_CNPJ           = 2;
+    const DOCUMENT_TYPE_RG             = 3;
+    const DOCUMENT_TYPE_IE             = 4;
+    const DOCUMENT_TYPE_PASSAPORTE     = 5;
+    const DOCUMENT_TYPE_CTPS           = 6;
+    const DOCUMENT_TYPE_TITULO_ELEITOR = 7;
+
+    private $documentTypes = array(
+        self::DOCUMENT_TYPE_CPF,
+        self::DOCUMENT_TYPE_CNPJ,
+        self::DOCUMENT_TYPE_RG,
+        self::DOCUMENT_TYPE_IE,
+        self::DOCUMENT_TYPE_PASSAPORTE,
+        self::DOCUMENT_TYPE_CTPS,
+        self::DOCUMENT_TYPE_TITULO_ELEITOR
+    );
+
     private $name;
     private $frequentFlyerCard;
     private $legalDocumentType;
@@ -70,6 +88,10 @@ class Passenger implements XmlEntityInterface
 
     public function setLegalDocumentType($legalDocumentType)
     {
+        if (!in_array($legalDocumentType, $this->documentTypes)) {
+            throw new \InvalidArgumentException(sprintf('Invalid document type (%s)', $legalDocumentType));
+        }
+
         $this->legalDocumentType = $legalDocumentType;
         return $this;
     }

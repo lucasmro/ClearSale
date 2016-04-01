@@ -7,6 +7,7 @@ use XMLWriter;
 
 class Card implements XmlEntityInterface
 {
+    const DINERS           = 1;
     const MASTERCARD       = 2;
     const VISA             = 3;
     const OUTROS           = 4;
