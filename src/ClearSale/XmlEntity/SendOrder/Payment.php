@@ -1,30 +1,30 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity\SendOrder;
 
+use ClearSale\Exception\RequiredFieldException;
 use ClearSale\Type\Currency;
+use ClearSale\XmlEntity\XmlEntityInterface;
 use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
 
-class Payment
+class Payment implements XmlEntityInterface
 {
-    const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
-
-    const CARTAO_CREDITO = 1;
-    const BOLETO_BANCARIO = 2;
-    const DEBITO_BANCARIO = 3;
+    const CARTAO_CREDITO           = 1;
+    const BOLETO_BANCARIO          = 2;
+    const DEBITO_BANCARIO          = 3;
     const DEBITO_BANCARIO_DINHEIRO = 4;
-    const DEBITO_BANCARIO_CHEQUE = 5;
-    const TRANSFERENCIA_BANCARIA = 6;
-    const SEDEX_A_COBRAR = 7;
-    const CHEQUE = 8;
-    const DINHEIRO = 9;
-    const FINANCIAMENTO = 10;
-    const FATURA = 11;
-    const CUPOM = 12;
-    const MULTICHEQUE = 13;
-    const OUTROS = 14;
+    const DEBITO_BANCARIO_CHEQUE   = 5;
+    const TRANSFERENCIA_BANCARIA   = 6;
+    const SEDEX_A_COBRAR           = 7;
+    const CHEQUE                   = 8;
+    const DINHEIRO                 = 9;
+    const FINANCIAMENTO            = 10;
+    const FATURA                   = 11;
+    const CUPOM                    = 12;
+    const MULTICHEQUE              = 13;
+    const OUTROS                   = 14;
 
     private static $paymentTypes = array(
         self::CARTAO_CREDITO,
@@ -56,17 +56,14 @@ class Payment
     private $nsu;
     private $currency;
 
-    public function __construct()
-    {
-    }
-
-    public static function create($type, $date, $amount)
+    public static function create($type, DateTime $date, $amount)
     {
         $instance = new self();
 
-        $instance->$type = $type;
-        $instance->date = $date;
-        $instance->amount = $amount;
+        $instance
+            ->setType($type)
+            ->setDate($date)
+            ->setAmount($amount);
 
         return $instance;
     }
@@ -79,9 +76,7 @@ class Payment
     public function setType($type)
     {
         if (!array_key_exists($type, self::$paymentTypes)) {
-            throw new InvalidArgumentException(
-                sprintf('Invalid payment type (%s)', $type)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid payment type (%s)', $type));
         }
 
         $this->type = $type;
@@ -101,28 +96,23 @@ class Payment
         return $this;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
     public function getDate()
     {
         return $this->date;
     }
 
     /**
-     * Set date in format "Y-m-d" or UNIX_TIMESTAMP
-     *
-     * @param $date
-     * @param bool $isUnixTimestampFormat
-     * @return self
+     * 
+     * @param DateTime $date
+     * @return Payment
      */
-    public function setDate($date, $isUnixTimestampFormat = false)
+    public function setDate(DateTime $date)
     {
-        if (!$isUnixTimestampFormat) {
-            $datetime = new DateTime($date);
-        } else {
-            $datetime = new DateTime();
-            $datetime->setTimestamp($date);
-        }
-
-        $this->date = $datetime->format(self::DATE_TIME_FORMAT);
+        $this->date = $date;
 
         return $this;
     }
@@ -175,11 +165,20 @@ class Payment
         return $this;
     }
 
+    /**
+     *
+     * @return Card
+     */
     public function getCard()
     {
         return $this->card;
     }
 
+    /**
+     *
+     * @param Card $card
+     * @return Payment
+     */
     public function setCard(Card $card)
     {
         $this->card = $card;
@@ -199,6 +198,10 @@ class Payment
         return $this;
     }
 
+    /**
+     *
+     * @return Address
+     */
     public function getAddress()
     {
         return $this->address;
@@ -244,15 +247,21 @@ class Payment
         }
 
         if ($this->date) {
-            $xml->writeElement("Date", $this->date);
+            $xml->writeElement("Date", $this->date->format(Order::DATE_TIME_FORMAT));
+        } else {
+            throw new RequiredFieldException('Field Date of the Payment object is required');
         }
 
         if ($this->amount) {
             $xml->writeElement("Amount", $this->amount);
+        } else {
+            throw new RequiredFieldException('Field Amount of the Payment object is required');
         }
 
         if ($this->type) {
             $xml->writeElement("PaymentTypeID", $this->type);
+        } else {
+            throw new RequiredFieldException('Field PaymentTypeID of the Payment object is required');
         }
 
         if ($this->qtyInstallments) {

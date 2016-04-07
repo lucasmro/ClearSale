@@ -1,8 +1,13 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity\SendOrder;
 
-class Address
+use ClearSale\Exception\RequiredFieldException;
+use ClearSale\XmlEntity\XmlEntityInterface;
+use InvalidArgumentException;
+use XMLWriter;
+
+class Address implements XmlEntityInterface
 {
     private $street;
     private $number;
@@ -13,10 +18,6 @@ class Address
     private $country;
     private $zipCode;
     private $reference;
-
-    public function __construct()
-    {
-    }
 
     public static function create($street, $number, $county, $country, $city, $state, $zipCode)
     {
@@ -41,7 +42,7 @@ class Address
     public function setStreet($street)
     {
         if (empty($street)) {
-            throw new \InvalidArgumentException('Street is empty!');
+            throw new InvalidArgumentException('Street is empty!');
         }
 
         $this->street = $street;
@@ -59,7 +60,7 @@ class Address
         $number = preg_replace('/[^0-9]/', '', $number);
 
         if (empty($number)) {
-            throw new \InvalidArgumentException('Number is empty!');
+            throw new InvalidArgumentException('Number is empty!');
         }
 
         $this->number = $number;
@@ -87,7 +88,7 @@ class Address
     public function setCounty($county)
     {
         if (empty($county)) {
-            throw new \InvalidArgumentException('County is empty!');
+            throw new InvalidArgumentException('County is empty!');
         }
 
         $this->county = $county;
@@ -103,7 +104,7 @@ class Address
     public function setCity($city)
     {
         if (empty($city)) {
-            throw new \InvalidArgumentException('City is empty!');
+            throw new InvalidArgumentException('City is empty!');
         }
 
         $this->city = $city;
@@ -119,7 +120,7 @@ class Address
     public function setState($state)
     {
         if (empty($state)) {
-            throw new \InvalidArgumentException('State is empty!');
+            throw new InvalidArgumentException('State is empty!');
         }
 
         $this->state = $state;
@@ -135,7 +136,7 @@ class Address
     public function setCountry($country)
     {
         if (empty($country)) {
-            throw new \InvalidArgumentException('Country is empty!');
+            throw new InvalidArgumentException('Country is empty!');
         }
 
         $this->country = $country;
@@ -143,7 +144,8 @@ class Address
         return $this;
     }
 
-    public function getZipCode() {
+    public function getZipCode()
+    {
         return $this->zipCode;
     }
 
@@ -152,7 +154,7 @@ class Address
         $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
 
         if (empty($zipCode)) {
-            throw new \InvalidArgumentException('ZipCode is empty!');
+            throw new InvalidArgumentException('ZipCode is empty!');
         }
 
         $this->zipCode = $zipCode;
@@ -172,16 +174,20 @@ class Address
         return $this;
     }
 
-    public function toXML(\XMLWriter $xml)
+    public function toXML(XMLWriter $xml)
     {
         $xml->startElement("Address");
 
         if ($this->street) {
             $xml->writeElement("Street", $this->street);
+        } else {
+            throw new RequiredFieldException('Field Street of the Address object is required');
         }
 
         if ($this->number) {
             $xml->writeElement("Number", $this->number);
+        } else {
+            throw new RequiredFieldException('Field Number of the Address object is required');
         }
 
         if ($this->complement) {
@@ -190,14 +196,20 @@ class Address
 
         if ($this->county) {
             $xml->writeElement("County", $this->county);
+        } else {
+            throw new RequiredFieldException('Field County of the Address object is required');
         }
 
         if ($this->city) {
             $xml->writeElement("City", $this->city);
+        } else {
+            throw new RequiredFieldException('Field City of the Address object is required');
         }
 
         if ($this->state) {
             $xml->writeElement("State", $this->state);
+        } else {
+            throw new RequiredFieldException('Field State of the Address object is required');
         }
 
         if ($this->country) {
@@ -206,6 +218,8 @@ class Address
 
         if ($this->zipCode) {
             $xml->writeElement("ZipCode", $this->zipCode);
+        } else {
+            throw new RequiredFieldException('Field ZipCode of the Address object is required');
         }
 
         if ($this->reference) {

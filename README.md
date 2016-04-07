@@ -48,8 +48,9 @@ TODO: Renomear as referências no código de staging para sandbox
 O trecho de código abaixo é um exemplo básico de como realizar a solicitação de análise de risco:
 
 ```PHP
+
 try {
-    $order = new ClearSale\Order();
+    $order = new \ClearSale\Order();
     $order->setFingerPrint($fingerPrint)
         ->setId($orderId)
         ->setDate(time(), true)
@@ -63,27 +64,30 @@ try {
         ->setItems($items)
         ->setPayments($payments);
 
+    // Cria-se o objeto do ambiente
+    $environment = new \ClearSale\Environment\Sandbox('CLEARSALE_ENTITY_CODE');
+
     // Solicitação de análise
-    $clearSale = new ClearSaleAnalysis('CLEARSALE_ENTITY_CODE', 'CLEARSALE_ENVIRONMENT');
+    $clearSale = new \ClearSale\ClearSaleAnalysis($environment);
     $response = $clearSale->analysis($order);
 
     // Resultado da análise
     switch ($response)
     {
-        case ClearSaleAnalysis::APROVADO:
+        case \ClearSale\ClearSaleAnalysis::APROVADO:
             // Análise aprovou a cobrança, realizar o pagamento
 
             break;
-        case ClearSaleAnalysis::REPROVADO:
+        case \ClearSale\ClearSaleAnalysis::REPROVADO:
             // Análise não aprovou a cobrança
 
             break;
-        case ClearSaleAnalysis::AGUARDANDO_APROVACAO:
+        case \ClearSale\ClearSaleAnalysis::AGUARDANDO_APROVACAO:
             // Análise pendente de aprovação manual
 
             break;
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     // Erro genérico da análise
 }
 ```

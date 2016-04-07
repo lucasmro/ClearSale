@@ -1,8 +1,13 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity\SendOrder;
 
-class Item
+use ClearSale\Exception\RequiredFieldException;
+use ClearSale\XmlEntity\XmlEntityInterface;
+use InvalidArgumentException;
+use XMLWriter;
+
+class Item implements XmlEntityInterface
 {
     private $id;
     private $name;
@@ -12,20 +17,15 @@ class Item
     private $categoryId;
     private $categoryName;
 
-    public function __construct()
-    {
-
-    }
-
     /**
      * Criar Item com campos obrigatórios preenchidos
      *
-     * @param String $id - Código do Produto
-     * @param String $name - Nome do Produto
-     * @param Float $value - Valor Unitário
-     * @param Integer $quantity - Quantidade
+     * @param string $id - Código do Produto
+     * @param string $name - Nome do Produto
+     * @param float $value - Valor Unitário
+     * @param integer $quantity - Quantidade
      *
-     * @return \Lucasmro\ClearSale\Item
+     * @return Item
      */
     public static function create($id, $name, $value, $quantity)
     {
@@ -47,7 +47,7 @@ class Item
     public function setId($id)
     {
         if (empty($id)) {
-            throw new \InvalidArgumentException('Id is empty!');
+            throw new InvalidArgumentException('Id is empty!');
         }
 
         $this->id = $id;
@@ -63,7 +63,7 @@ class Item
     public function setName($name)
     {
         if (empty($name)) {
-            throw new \InvalidArgumentException('Name is empty!');
+            throw new InvalidArgumentException('Name is empty!');
         }
 
         $this->name = $name;
@@ -71,16 +71,15 @@ class Item
         return $this;
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         return $this->value;
     }
 
     public function setValue($value)
     {
         if (!is_float($value)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid value', $value)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid value', $value));
         }
 
         $this->value = $value;
@@ -96,9 +95,7 @@ class Item
     public function setQuantity($quantity)
     {
         if (!is_int($quantity)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid quantity', $quantity)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid quantity', $quantity));
         }
 
         $this->quantity = $quantity;
@@ -114,9 +111,7 @@ class Item
     public function setGift($gift)
     {
         if (!is_bool($gift)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid gift value', $gift)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid gift value', $gift));
         }
 
         $this->isGift = $gift;
@@ -132,9 +127,7 @@ class Item
     public function setCategoryId($categoryId)
     {
         if (!is_int($categoryId)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid categoryId', $categoryId)
-            );
+            throw new InvalidArgumentException(sprintf('Invalid categoryId', $categoryId));
         }
 
         $this->categoryId = $categoryId;
@@ -150,7 +143,7 @@ class Item
     public function setCategoryName($categoryName)
     {
         if (empty($categoryName)) {
-            throw new \InvalidArgumentException('Category name is empty!');
+            throw new InvalidArgumentException('Category name is empty!');
         }
 
         $this->categoryName = $categoryName;
@@ -158,24 +151,32 @@ class Item
         return $this;
     }
 
-    public function toXML(\XMLWriter $xml)
+    public function toXML(XMLWriter $xml)
     {
         $xml->startElement("Item");
 
         if ($this->id) {
             $xml->writeElement("ID", $this->id);
+        } else {
+            throw new RequiredFieldException('Field ID of the Item object is required');
         }
 
         if ($this->name) {
             $xml->writeElement("Name", $this->name);
+        } else {
+            throw new RequiredFieldException('Field Name of the Payment object is required');
         }
 
         if ($this->value) {
             $xml->writeElement("ItemValue", $this->value);
+        } else {
+            throw new RequiredFieldException('Field ItemValue of the Payment object is required');
         }
 
         if ($this->quantity) {
             $xml->writeElement("Qty", $this->quantity);
+        } else {
+            throw new RequiredFieldException('Field Qty of the Payment object is required');
         }
 
         if ($this->isGift) {

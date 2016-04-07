@@ -1,8 +1,11 @@
 <?php
 
-namespace ClearSale;
+namespace ClearSale\XmlEntity\SendOrder;
 
-class FingerPrint
+use ClearSale\XmlEntity\XmlEntityInterface;
+use XMLWriter;
+
+class FingerPrint implements XmlEntityInterface
 {
     private $sessionId;
 
@@ -23,7 +26,7 @@ class FingerPrint
         return $this;
     }
 
-    public function toXML(\XMLWriter $xml)
+    public function toXML(XMLWriter $xml)
     {
         $xml->startElement("FingerPrint");
 

@@ -2,18 +2,11 @@
 
 namespace ClearSale;
 
+use ClearSale\XmlEntity\SendOrder\Order;
+use ClearSale\XmlEntity\Response\PackageStatus;
+
 class ClearSaleService extends ClearSaleIntegration
 {
-    private static $endpoints = array(
-        'staging' => 'http://homologacao.clearsale.com.br/integracaov2/service.asmx',
-        'production' => 'http://clearsale.com.br/integracaov2/service.asmx',
-    );
-
-    public function getEndpoint()
-    {
-        return self::$endpoints[$this->getEnvironment()->getType()];
-    }
-
     /**
      * Retorna o status de um pedido
      *
@@ -21,10 +14,10 @@ class ClearSaleService extends ClearSaleIntegration
      */
     public function getOrderStatus($orderId)
     {
-        $function = 'GetOrderStatus';
+        $function   = 'GetOrderStatus';
         $parameters = array(
-            'entityCode' => $this->entityCode,
-            'orderID' => $orderId
+            'entityCode' => $this->getEnvironment()->getEntityCode(),
+            'orderID'    => $orderId
         );
 
         $response = $this->connector->doRequest($function, $parameters);
@@ -42,10 +35,10 @@ class ClearSaleService extends ClearSaleIntegration
      */
     public function sendOrders(Order $order)
     {
-        $function = 'SendOrders';
+        $function   = 'SendOrders';
         $parameters = array(
-            'entityCode' => $this->entityCode,
-            'xml' => $order->toXML()
+            'entityCode' => $this->getEnvironment()->getEntityCode(),
+            'xml'        => $order->toXML($this->getEnvironment()->isDebug())
         );
 
         // TODO: Implement log -> $parameters['xml']
