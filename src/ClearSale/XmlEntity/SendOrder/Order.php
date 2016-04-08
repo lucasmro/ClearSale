@@ -10,16 +10,16 @@ use XMLWriter;
 class Order
 {
     const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
-    const ECOMMERCE_B2B    = 'b2b';
-    const ECOMMERCE_B2C    = 'b2c';
+    const ECOMMERCE_B2B = 'b2b';
+    const ECOMMERCE_B2C = 'b2c';
 
     private static $ecommerceTypes = array(
         self::ECOMMERCE_B2B,
         self::ECOMMERCE_B2C,
     );
 
-    const STATUS_NOVO      = 0;
-    const STATUS_APROVADO  = 9;
+    const STATUS_NOVO = 0;
+    const STATUS_APROVADO = 9;
     const STATUS_CANCELADO = 41;
     const STATUS_REPROVADO = 45;
 
@@ -30,16 +30,16 @@ class Order
         self::STATUS_REPROVADO,
     );
 
-    const PRODUCT_A_CLEAR_SALE          = 1;
-    const PRODUCT_M_CLEAR_SALE          = 2;
-    const PRODUCT_T_CLEAR_SALE          = 3;
-    const PRODUCT_TG_CLEAR_SALE         = 4;
-    const PRODUCT_TH_CLEAR_SALE         = 5;
-    const PRODUCT_TG_LIGHT_CLEAR_SALE   = 6;
-    const PRODUCT_TG_FULL_CLEAR_SALE    = 7;
-    const PRODUCT_T_MONITORADO          = 8;
-    const PRODUCT_SCORE_DE_FRAUDE       = 9;
-    const PRODUCT_CLEAR_ID              = 10;
+    const PRODUCT_A_CLEAR_SALE = 1;
+    const PRODUCT_M_CLEAR_SALE = 2;
+    const PRODUCT_T_CLEAR_SALE = 3;
+    const PRODUCT_TG_CLEAR_SALE = 4;
+    const PRODUCT_TH_CLEAR_SALE = 5;
+    const PRODUCT_TG_LIGHT_CLEAR_SALE = 6;
+    const PRODUCT_TG_FULL_CLEAR_SALE = 7;
+    const PRODUCT_T_MONITORADO = 8;
+    const PRODUCT_SCORE_DE_FRAUDE = 9;
+    const PRODUCT_CLEAR_ID = 10;
     const PRODUCT_ANALISE_INTERNACIONAL = 11;
 
     private static $products = array(
@@ -56,11 +56,11 @@ class Order
         self::PRODUCT_ANALISE_INTERNACIONAL,
     );
 
-    const LIST_TYPE_NAO_CADASTRADA        = 1;
-    const LIST_TYPE_CHA_DE_BEBE           = 2;
-    const LIST_TYPE_CASAMENTO             = 3;
-    const LIST_TYPE_DESEJOS               = 4;
-    const LIST_TYPE_ANIVERSARIO           = 5;
+    const LIST_TYPE_NAO_CADASTRADA = 1;
+    const LIST_TYPE_CHA_DE_BEBE = 2;
+    const LIST_TYPE_CASAMENTO = 3;
+    const LIST_TYPE_DESEJOS = 4;
+    const LIST_TYPE_ANIVERSARIO = 5;
     const LIST_TYPE_CHA_BAR_OU_CHA_PANELA = 6;
 
     private static $listTypes = array(
@@ -105,12 +105,15 @@ class Order
     private $hotelReservations;
 
     /**
-     *
      * @param FingerPrint $fingerPrint
      * @param int $id
      * @param DateTime $date
      * @param string $email
+     * @param float $totalItems
      * @param float $totalOrder
+     * @param int $quantityInstallments
+     * @param string $ip
+     * @param string $origin
      * @param Customer $billingData
      * @param Customer $shippingData
      * @param Payment $payment
@@ -120,9 +123,10 @@ class Order
      * @param HotelReservation $hotelReservation
      * @return Order
      */
-    public static function create(FingerPrint $fingerPrint, $id, DateTime $date, $email, $totalOrder,
-        Customer $billingData, Customer $shippingData, Payment $payment, Item $item, Passenger $passenger = null,
-        Connection $connection = null, HotelReservation $hotelReservation = null)
+    public static function create(FingerPrint $fingerPrint, $id, DateTime $date, $email, $totalItems, $totalOrder,
+                                  $quantityInstallments, $ip, $origin, Customer $billingData, Customer $shippingData,
+                                  Payment $payment, Item $item, Passenger $passenger = null,
+                                  Connection $connection = null, HotelReservation $hotelReservation = null)
     {
         $instance = new self();
 
@@ -130,8 +134,11 @@ class Order
         $instance->setId($id);
         $instance->setDate($date);
         $instance->setEmail($email);
-        $instance->setTotalItems(1);
+        $instance->setTotalItems($totalItems);
         $instance->setTotalOrder($totalOrder);
+        $instance->setQuantityInstallments($quantityInstallments);
+        $instance->setIp($ip);
+        $instance->setOrigin($origin);
         $instance->setBillingData($billingData);
         $instance->setShippingData($shippingData);
         $instance->addPayment($payment);
@@ -601,7 +608,7 @@ class Order
      * @param Item $item
      * @return Order
      */
-    public function addItems(Item $item)
+    public function addItem(Item $item)
     {
         $this->items[] = $item;
 
