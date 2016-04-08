@@ -10,7 +10,7 @@ use XMLWriter;
 
 class Customer implements XmlEntityInterface
 {
-    const TYPE_PESSOA_FISICA   = 1;
+    const TYPE_PESSOA_FISICA = 1;
     const TYPE_PESSOA_JURIDICA = 2;
 
     private static $customerTypes = array(
@@ -19,84 +19,35 @@ class Customer implements XmlEntityInterface
     );
 
     const GENDER_MASCULINO = 'M';
-    const GENDER_FEMININO  = 'F';
+    const GENDER_FEMININO = 'F';
 
     private static $genderTypes = array(
         self::GENDER_MASCULINO,
         self::GENDER_FEMININO,
     );
 
-    /**
-     *
-     * @var string
-     */
     private $id;
-
-    /**
-     *
-     * @var int
-     */
     private $type;
-
-    /**
-     *
-     * @var string
-     */
     private $legalDocument1;
-
-    /**
-     *
-     * @var string
-     */
     private $legalDocument2;
-
-    /**
-     *
-     * @var string
-     */
     private $name;
-
-    /**
-     *
-     * @var DateTime
-     */
     private $birthDate;
-
-    /**
-     *
-     * @var string
-     */
     private $email;
-
-    /**
-     *
-     * @var string
-     */
     private $gender;
-
-    /**
-     *
-     * @var Address
-     */
     private $address;
-
-    /**
-     *
-     * @var Phone[]
-     */
     private $phones;
 
     /**
-     *
      * @param string $id
      * @param string $type
      * @param string $legalDocument
      * @param string $name
      * @param Address $address
      * @param Phone $phone
+     * @param DateTime $birthDate
      * @return Customer
      */
-    public static function create($id, $type, $legalDocument, $name, Address $address, array $phone)
+    public static function create($id, $type, $legalDocument, $name, Address $address, $phone, DateTime $birthDate)
     {
         $instance = new self();
 
@@ -106,6 +57,7 @@ class Customer implements XmlEntityInterface
         $instance->setName($name);
         $instance->setAddress($address);
         $instance->addPhone($phone);
+        $instance->setBirthDate($birthDate);
 
         return $instance;
     }
