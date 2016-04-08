@@ -8,12 +8,12 @@ use DateTime;
 use InvalidArgumentException;
 use XMLWriter;
 
-class Customer implements XmlEntityInterface
+abstract class AbstractCustomer implements XmlEntityInterface
 {
     const TYPE_PESSOA_FISICA = 1;
     const TYPE_PESSOA_JURIDICA = 2;
 
-    private static $customerTypes = array(
+    protected static $customerTypes = array(
         self::TYPE_PESSOA_FISICA,
         self::TYPE_PESSOA_JURIDICA,
     );
@@ -21,46 +21,21 @@ class Customer implements XmlEntityInterface
     const GENDER_MASCULINO = 'M';
     const GENDER_FEMININO = 'F';
 
-    private static $genderTypes = array(
+    protected static $genderTypes = array(
         self::GENDER_MASCULINO,
         self::GENDER_FEMININO,
     );
 
-    private $id;
-    private $type;
-    private $legalDocument1;
-    private $legalDocument2;
-    private $name;
-    private $birthDate;
-    private $email;
-    private $gender;
-    private $address;
-    private $phones;
-
-    /**
-     * @param string $id
-     * @param string $type
-     * @param string $legalDocument
-     * @param string $name
-     * @param Address $address
-     * @param Phone $phone
-     * @param DateTime $birthDate
-     * @return Customer
-     */
-    public static function create($id, $type, $legalDocument, $name, Address $address, $phone, DateTime $birthDate)
-    {
-        $instance = new self();
-
-        $instance->setId($id);
-        $instance->setType($type);
-        $instance->setLegalDocument1($legalDocument);
-        $instance->setName($name);
-        $instance->setAddress($address);
-        $instance->addPhone($phone);
-        $instance->setBirthDate($birthDate);
-
-        return $instance;
-    }
+    protected $id;
+    protected $type;
+    protected $legalDocument1;
+    protected $legalDocument2;
+    protected $name;
+    protected $birthDate;
+    protected $email;
+    protected $gender;
+    protected $address;
+    protected $phones;
 
     /**
      *
@@ -348,12 +323,6 @@ class Customer implements XmlEntityInterface
             $xml->writeElement("Name", $this->name);
         } else {
             throw new RequiredFieldException('Field name of the Customer object is required');
-        }
-
-        if ($this->birthDate) {
-            $xml->writeElement("BirthDate", $this->birthDate->format(Order::DATE_TIME_FORMAT));
-        } else {
-            throw new RequiredFieldException('Field BirthDate of the Customer object is required');
         }
 
         if ($this->email) {

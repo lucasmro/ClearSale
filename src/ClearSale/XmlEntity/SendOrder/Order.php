@@ -96,8 +96,8 @@ class Order
     private $product;
     private $listType;
     private $listId;
-    private $billingData;
-    private $shippingData;
+    private $customerBillingData;
+    private $customerShippingData;
     private $payments;
     private $items;
     private $passengers;
@@ -114,8 +114,56 @@ class Order
      * @param int $quantityInstallments
      * @param string $ip
      * @param string $origin
-     * @param Customer $billingData
-     * @param Customer $shippingData
+     * @param CustomerBillingData $customerBillingData
+     * @param CustomerShippingData $customerShippingData
+     * @param Payment $payment
+     * @param Item $item
+     * @return Order
+     */
+    public static function createEcommerceOrder(
+        FingerPrint $fingerPrint,
+        $id,
+        DateTime $date,
+        $email,
+        $totalItems,
+        $totalOrder,
+        $quantityInstallments,
+        $ip,
+        $origin,
+        CustomerBillingData $customerBillingData,
+        CustomerShippingData $customerShippingData,
+        Payment $payment,
+        Item $item
+    ) {
+        return static::create(
+            $fingerPrint,
+            $id,
+            $date,
+            $email,
+            $totalItems,
+            $totalOrder,
+            $quantityInstallments,
+            $ip,
+            $origin,
+            $customerBillingData,
+            $customerShippingData,
+            $payment,
+            $item
+        );
+    }
+
+    /**
+     * @param FingerPrint $fingerPrint
+     * @param int $id
+     * @param DateTime $date
+     * @param string $email
+     * @param float $totalItems
+     * @param float $totalOrder
+     * @param int $quantityInstallments
+     * @param string $ip
+     * @param string $origin
+     * @param CustomerBillingData $customerBillingData
+     * @param CustomerShippingData $customerShippingData
      * @param Payment $payment
      * @param Item $item
      * @param Passenger $passenger
@@ -123,11 +171,62 @@ class Order
      * @param HotelReservation $hotelReservation
      * @return Order
      */
-    public static function create(FingerPrint $fingerPrint, $id, DateTime $date, $email, $totalItems, $totalOrder,
-                                  $quantityInstallments, $ip, $origin, Customer $billingData, Customer $shippingData,
-                                  Payment $payment, Item $item, Passenger $passenger = null,
-                                  Connection $connection = null, HotelReservation $hotelReservation = null)
-    {
+    public static function createAirlineTicketOrder(
+        FingerPrint $fingerPrint,
+        $id,
+        DateTime $date,
+        $email,
+        $totalItems,
+        $totalOrder,
+        $quantityInstallments,
+        $ip,
+        $origin,
+        CustomerBillingData $customerBillingData,
+        CustomerShippingData $customerShippingData,
+        Payment $payment,
+        Item $item,
+        Passenger $passenger = null,
+        Connection $connection = null,
+        HotelReservation $hotelReservation = null
+    ) {
+        return static::create(
+            $fingerPrint,
+            $id,
+            $date,
+            $email,
+            $totalItems,
+            $totalOrder,
+            $quantityInstallments,
+            $ip,
+            $origin,
+            $customerBillingData,
+            $customerShippingData,
+            $payment,
+            $item,
+            $passenger,
+            $connection,
+            $hotelReservation
+        );
+    }
+
+    private static function create(
+        FingerPrint $fingerPrint,
+        $id,
+        DateTime $date,
+        $email,
+        $totalItems,
+        $totalOrder,
+        $quantityInstallments,
+        $ip,
+        $origin,
+        CustomerBillingData $customerBillingData,
+        CustomerShippingData $shippingData,
+        Payment $payment,
+        Item $item,
+        Passenger $passenger = null,
+        Connection $connection = null,
+        HotelReservation $hotelReservation = null
+    ) {
         $instance = new self();
 
         $instance->setFingerPrint($fingerPrint);
@@ -139,20 +238,20 @@ class Order
         $instance->setQuantityInstallments($quantityInstallments);
         $instance->setIp($ip);
         $instance->setOrigin($origin);
-        $instance->setBillingData($billingData);
+        $instance->setBillingData($customerBillingData);
         $instance->setShippingData($shippingData);
         $instance->addPayment($payment);
         $instance->addItem($item);
 
-        if (!is_null($passenger)) {
+        if (null !== $passenger) {
             $instance->addPassenger($passenger);
         }
 
-        if (!is_null($connection)) {
+        if (null !== $connection) {
             $instance->addConnection($connection);
         }
 
-        if (!is_null($hotelReservation)) {
+        if (null !== $hotelReservation) {
             $instance->addHotelReservation($hotelReservation);
         }
 
@@ -495,7 +594,7 @@ class Order
 
     /**
      *
-     * @return Customer
+     * @return CustomerBillingData
      */
     public function getBillingData()
     {
@@ -504,19 +603,19 @@ class Order
 
     /**
      *
-     * @param Customer $billingData
+     * @param CustomerBillingData $customerBillingData
      * @return Order
      */
-    public function setBillingData(Customer $billingData)
+    public function setBillingData(CustomerBillingData $customerBillingData)
     {
-        $this->billingData = $billingData;
+        $this->customerBillingData = $customerBillingData;
 
         return $this;
     }
 
     /**
      *
-     * @return Customer
+     * @return CustomerShippingData
      */
     public function getShippingData()
     {
@@ -525,12 +624,12 @@ class Order
 
     /**
      *
-     * @param Customer $shippingData
+     * @param CustomerShippingData $customerShippingData
      * @return Order
      */
-    public function setShippingData(Customer $shippingData)
+    public function setShippingData(CustomerShippingData $customerShippingData)
     {
-        $this->shippingData = $shippingData;
+        $this->customerShippingData = $customerShippingData;
 
         return $this;
     }
@@ -837,15 +936,15 @@ class Order
             $xml->writeElement("ListID", $this->listId);
         }
 
-        if ($this->billingData) {
+        if ($this->customerBillingData) {
             $xml->startElement("BillingData");
-            $this->billingData->toXML($xml);
+            $this->customerBillingData->toXML($xml);
             $xml->endElement();
         }
 
-        if ($this->shippingData) {
+        if ($this->customerShippingData) {
             $xml->startElement("ShippingData");
-            $this->shippingData->toXML($xml);
+            $this->customerShippingData->toXML($xml);
             $xml->endElement();
         }
 
