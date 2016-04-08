@@ -9,57 +9,25 @@ use XMLWriter;
 
 class Connection implements XmlEntityInterface
 {
-    /**
-     *
-     * @var string
-     */
     private $company;
-
-    /**
-     *
-     * @var string
-     */
     private $flightNumber;
-
-    /**
-     *
-     * @var DateTime
-     */
     private $flightDate;
-
-    /**
-     *
-     * @var string
-     */
     private $class;
-
-    /**
-     *
-     * @var string
-     */
     private $from;
-
-    /**
-     *
-     * @var string
-     */
     private $to;
-
-    /**
-     *
-     * @var DateTime
-     */
     private $departureDate;
-
-    /**
-     *
-     * @var DateTime
-     */
     private $arrivalDate;
 
-    public static function create($company, $flightNumber, DateTime $flightDate, $class, $from, $to,
-        DateTime $departureDate, DateTime $arrivalDate)
-    {
+    public static function create(
+        $company,
+        $flightNumber,
+        DateTime $flightDate,
+        $class,
+        $from,
+        $to,
+        DateTime $departureDate,
+        DateTime $arrivalDate
+    ) {
         $connection = new self();
 
         $connection
