@@ -1,5 +1,7 @@
 # API ClearSale
 
+[![Build Status](https://travis-ci.org/lucasmro/ClearSale.png)](https://travis-ci.org/lucasmro/ClearSale)
+
 API de integração com a ClearSale.
 
 ## O que é ClearSale?
