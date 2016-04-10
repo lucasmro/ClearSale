@@ -17,6 +17,13 @@ class SandboxTest extends \PHPUnit_Framework_TestCase
         $this->environment = new Sandbox(self::ENTITY_CODE);
     }
 
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->environment = null;
+    }
+
     public function testEntityCode()
     {
         $this->assertSame(self::ENTITY_CODE, $this->environment->getEntityCode());
