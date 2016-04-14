@@ -2,7 +2,7 @@
 
 namespace ClearSale\Test\XmlEntity\SendOrder;
 
-use ClearSale\DataFixtures\PhoneData;
+use ClearSale\Common\DataFixtures\PhoneFixture;
 use ClearSale\XmlEntity\SendOrder\Phone;
 use ClearSale\XmlEntity\XmlEntityInterface;
 
@@ -12,7 +12,7 @@ class PhoneTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->phone = PhoneData::createPhoneFixture();
+        $this->phone = PhoneFixture::createPhone();
     }
 
     protected function tearDown()

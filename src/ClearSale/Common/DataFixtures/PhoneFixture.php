@@ -1,12 +1,12 @@
 <?php
 
-namespace ClearSale\DataFixtures;
+namespace ClearSale\Common\DataFixtures;
 
 use ClearSale\XmlEntity\SendOrder\Phone;
 
-class PhoneData
+class PhoneFixture
 {
-    public static function createPhoneFixture()
+    public static function createPhone()
     {
         return Phone::create(Phone::COMERCIAL, '11', '37288788');
     }

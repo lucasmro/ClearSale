@@ -2,7 +2,7 @@
 
 namespace ClearSale\Test\XmlEntity\SendOrder;
 
-use ClearSale\DataFixtures\FingerPrintData;
+use ClearSale\Common\DataFixtures\FingerPrintFixture;
 use ClearSale\XmlEntity\XmlEntityInterface;
 
 class FingerPrintTest extends \PHPUnit_Framework_TestCase
@@ -11,7 +11,7 @@ class FingerPrintTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fingerPrint = FingerPrintData::createFingerPrintFixture();
+        $this->fingerPrint = FingerPrintFixture::createFingerPrint();
     }
 
     protected function tearDown()

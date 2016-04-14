@@ -1,12 +1,12 @@
 <?php
 
-namespace ClearSale\DataFixtures;
+namespace ClearSale\Common\DataFixtures;
 
 use ClearSale\XmlEntity\SendOrder\Address;
 
-class AddressData
+class AddressFixture
 {
-    public static function createAddressFixture()
+    public static function createAddress()
     {
         $street = 'Rua José de Oliveira Coutinho';
         $number = 151;

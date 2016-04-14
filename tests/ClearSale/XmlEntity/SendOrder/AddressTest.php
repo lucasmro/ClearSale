@@ -2,7 +2,7 @@
 
 namespace ClearSale\Test\XmlEntity\SendOrder;
 
-use ClearSale\DataFixtures\AddressData;
+use ClearSale\Common\DataFixtures\AddressFixture;
 use ClearSale\XmlEntity\XmlEntityInterface;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
@@ -11,7 +11,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->address = AddressData::createAddressFixture();
+        $this->address = AddressFixture::createAddress();
     }
 
     protected function tearDown()

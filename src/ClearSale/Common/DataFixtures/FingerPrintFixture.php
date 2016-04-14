@@ -1,12 +1,12 @@
 <?php
 
-namespace ClearSale\DataFixtures;
+namespace ClearSale\Common\DataFixtures;
 
 use ClearSale\XmlEntity\SendOrder\FingerPrint;
 
-class FingerPrintData
+class FingerPrintFixture
 {
-    public static function createFingerPrintFixture()
+    public static function createFingerPrint()
     {
         return new FingerPrint('session-id-1234');
     }
