@@ -2,18 +2,16 @@
 
 namespace ClearSale\Test\XmlEntity\SendOrder;
 
-use ClearSale\XmlEntity\SendOrder\FingerPrint;
+use ClearSale\DataFixtures\FingerPrintData;
 use ClearSale\XmlEntity\XmlEntityInterface;
 
 class FingerPrintTest extends \PHPUnit_Framework_TestCase
 {
-    const SESSION_ID = 'session-id-1234';
-
     private $fingerPrint;
 
     protected function setUp()
     {
-        $this->fingerPrint = new FingerPrint(self::SESSION_ID);
+        $this->fingerPrint = FingerPrintData::createFingerPrintFixture();
     }
 
     protected function tearDown()
@@ -24,7 +22,7 @@ class FingerPrintTest extends \PHPUnit_Framework_TestCase
     }
     public function testFingerPrint()
     {
-        $this->assertSame(self::SESSION_ID, $this->fingerPrint->getSessionId());
+        $this->assertSame('session-id-1234', $this->fingerPrint->getSessionId());
     }
 
     public function testFingerPrintToXml()
