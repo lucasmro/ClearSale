@@ -2,6 +2,7 @@
 
 namespace ClearSale\Test\XmlEntity\SendOrder;
 
+use ClearSale\DataFixtures\PhoneData;
 use ClearSale\XmlEntity\SendOrder\Phone;
 use ClearSale\XmlEntity\XmlEntityInterface;
 
@@ -11,7 +12,7 @@ class PhoneTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->phone = $this->createPhoneFixture();
+        $this->phone = PhoneData::createPhoneFixture();
     }
 
     protected function tearDown()
@@ -44,10 +45,5 @@ class PhoneTest extends \PHPUnit_Framework_TestCase
         $xmlEntity->toXML($xmlWriter);
 
         return $xmlWriter->outputMemory(true);
-    }
-
-    private function createPhoneFixture()
-    {
-        return Phone::create(Phone::COMERCIAL, '11', '37288788');
     }
 }
