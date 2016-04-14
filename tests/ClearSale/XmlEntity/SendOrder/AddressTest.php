@@ -2,7 +2,7 @@
 
 namespace ClearSale\Test\XmlEntity\SendOrder;
 
-use ClearSale\XmlEntity\SendOrder\Address;
+use ClearSale\DataFixtures\AddressData;
 use ClearSale\XmlEntity\XmlEntityInterface;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
@@ -11,7 +11,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->address = $this->createAddressFixture();
+        $this->address = AddressData::createAddressFixture();
     }
 
     protected function tearDown()
@@ -48,18 +48,5 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $xmlEntity->toXML($xmlWriter);
 
         return $xmlWriter->outputMemory(true);
-    }
-
-    private function createAddressFixture()
-    {
-        $street = 'Rua José de Oliveira Coutinho';
-        $number = 151;
-        $county = 'Barra Funda';
-        $country = 'Brasil';
-        $city = 'São Paulo';
-        $state = 'SP';
-        $zip = '01144020';
-
-        return Address::create($street, $number, $county, $country, $city, $state, $zip);
     }
 }
