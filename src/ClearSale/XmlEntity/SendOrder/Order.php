@@ -941,9 +941,7 @@ class Order
         }
 
         if ($this->customerShippingData) {
-            $xml->startElement("ShippingData");
             $this->customerShippingData->toXML($xml);
-            $xml->endElement();
         }
 
         if (count($this->payments) > 0) {

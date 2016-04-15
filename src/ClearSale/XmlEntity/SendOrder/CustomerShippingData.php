@@ -32,4 +32,13 @@ class CustomerShippingData extends AbstractCustomer
 
         return $instance;
     }
+
+    public function toXML(XMLWriter $xml)
+    {
+        $xml->startElement("ShippingData");
+
+        parent::toXML($xml);
+
+        $xml->endElement();
+    }
 }
