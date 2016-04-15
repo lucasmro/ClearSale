@@ -937,9 +937,7 @@ class Order
         }
 
         if ($this->customerBillingData) {
-            $xml->startElement("BillingData");
             $this->customerBillingData->toXML($xml);
-            $xml->endElement();
         }
 
         if ($this->customerShippingData) {

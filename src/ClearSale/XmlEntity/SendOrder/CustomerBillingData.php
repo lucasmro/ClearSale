@@ -37,6 +37,8 @@ class CustomerBillingData extends AbstractCustomer
 
     public function toXML(XMLWriter $xml)
     {
+        $xml->startElement("BillingData");
+
         parent::toXML($xml);
 
         if ($this->birthDate) {
@@ -44,5 +46,7 @@ class CustomerBillingData extends AbstractCustomer
         } else {
             throw new RequiredFieldException('Field BirthDate of the CustomerBillingData object is required');
         }
+
+        $xml->endElement();
     }
 }
