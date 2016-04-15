@@ -28,7 +28,7 @@ class FingerPrintTest extends \PHPUnit_Framework_TestCase
     public function testFingerPrintToXml()
     {
         $outputXML = $this->generateXML($this->fingerPrint);
-        $expectedXmlFile = __DIR__ . '/../../../data/FingerPrint.xml';
+        $expectedXmlFile = __DIR__ . '/../../../data/fingerprint.xml';
 
         $this->assertXmlStringEqualsXmlFile($expectedXmlFile, $outputXML);
     }

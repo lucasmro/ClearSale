@@ -33,7 +33,7 @@ class CustomerShippingDataTest extends \PHPUnit_Framework_TestCase
     public function testCustomerShippingDataToXml()
     {
         $outputXML = $this->generateXML($this->customer);
-        $expectedXmlFile = __DIR__ . '/../../../data/CustomerShippingData.xml';
+        $expectedXmlFile = __DIR__ . '/../../../data/customer-shipping-data.xml';
 
         $this->assertXmlStringEqualsXmlFile($expectedXmlFile, $outputXML);
     }

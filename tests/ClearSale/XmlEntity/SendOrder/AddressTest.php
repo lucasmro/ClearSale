@@ -34,7 +34,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testAddressToXml()
     {
         $outputXML = $this->generateXML($this->address);
-        $expectedXmlFile = __DIR__ . '/../../../data/Address.xml';
+        $expectedXmlFile = __DIR__ . '/../../../data/address.xml';
 
         $this->assertXmlStringEqualsXmlFile($expectedXmlFile, $outputXML);
     }

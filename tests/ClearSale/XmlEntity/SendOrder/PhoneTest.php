@@ -31,7 +31,7 @@ class PhoneTest extends \PHPUnit_Framework_TestCase
     public function testPhoneToXml()
     {
         $outputXML = $this->generateXML($this->phone);
-        $expectedXmlFile = __DIR__ . '/../../../data/Phone.xml';
+        $expectedXmlFile = __DIR__ . '/../../../data/phone.xml';
 
         $this->assertXmlStringEqualsXmlFile($expectedXmlFile, $outputXML);
     }

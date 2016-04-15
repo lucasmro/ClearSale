@@ -34,7 +34,7 @@ class CustomerBillingDataTest extends \PHPUnit_Framework_TestCase
     public function testCustomerBillingDataToXml()
     {
         $outputXML = $this->generateXML($this->customer);
-        $expectedXmlFile = __DIR__ . '/../../../data/CustomerBillingData.xml';
+        $expectedXmlFile = __DIR__ . '/../../../data/customer-billing-data.xml';
 
         $this->assertXmlStringEqualsXmlFile($expectedXmlFile, $outputXML);
     }

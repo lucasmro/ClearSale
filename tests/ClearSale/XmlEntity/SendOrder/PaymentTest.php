@@ -31,7 +31,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     public function testPaymentToXml()
     {
         $outputXML = $this->generateXML($this->payment);
-        $expectedXmlFile = __DIR__ . '/../../../data/Payment.xml';
+        $expectedXmlFile = __DIR__ . '/../../../data/payment.xml';
 
         $this->assertXmlStringEqualsXmlFile($expectedXmlFile, $outputXML);
     }
