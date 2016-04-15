@@ -23,7 +23,8 @@ class CustomerShippingDataTest extends \PHPUnit_Framework_TestCase
     }
     public function testCustomerShippingData()
     {
-        $phone = $this->customer->getPhones()[0];
+        $phones = $this->customer->getPhones();
+        $phone = $phones[0];
 
         $this->assertSame('1', $this->customer->getId());
         $this->assertSame(AbstractCustomer::TYPE_PESSOA_FISICA, $this->customer->getType());
