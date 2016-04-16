@@ -1,5 +1,7 @@
 # API ClearSale
 
+**To read the documentation in English, please access the [README.eng.md](README.eng.md) file.**
+
 [![Build Status](https://travis-ci.org/lucasmro/ClearSale.png)](https://travis-ci.org/lucasmro/ClearSale)
 
 API de integração com a ClearSale.
@@ -15,7 +17,7 @@ PHP 5.3+
 
 ## Instalação
 
-A maneira mais fácil de instalar a biblioteca é através do Composer.
+A maneira mais fácil de instalar a biblioteca é através do [Composer](http://getcomposer.org/).
 
 ```JSON
 {
