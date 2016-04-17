@@ -40,8 +40,8 @@ This flow is responsible for demonstrating the integration between the client an
 * (A) The store sends a risk analysis request, informing the purchase data and the buyer information.
 * (B) ClearSale processes the request.
 * (C) ClearSale responds the request.
-* (D) If the response (C) is approved, the store must performs the billing request.
-* (D) If the response (C) is rejected, the store must not performs the billing request.
+* (D) If the response (C) is approved, the store should perform the billing request.
+* (D) If the response (C) is rejected, the store must not perform the billing request.
 * (D) If the response (C) is awaiting approval, the store should conduct further verifications on the ClearSale
 platform until the status of the analysis changes to approved or rejected.
 
