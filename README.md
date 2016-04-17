@@ -3,6 +3,10 @@
 **To read the documentation in English, please access the [README.eng.md](README.eng.md) file.**
 
 [![Build Status](https://travis-ci.org/lucasmro/ClearSale.png)](https://travis-ci.org/lucasmro/ClearSale)
+[![Latest Stable Version](https://poser.pugx.org/lucasmro/clearsale/v/stable)](https://packagist.org/packages/lucasmro/clearsale)
+[![Total Downloads](https://poser.pugx.org/lucasmro/clearsale/downloads)](https://packagist.org/packages/lucasmro/clearsale)
+[![Latest Unstable Version](https://poser.pugx.org/lucasmro/clearsale/v/unstable)](https://packagist.org/packages/lucasmro/clearsale)
+[![License](https://poser.pugx.org/lucasmro/clearsale/license)](https://packagist.org/packages/lucasmro/clearsale)
 
 API de integração com a ClearSale.
 
