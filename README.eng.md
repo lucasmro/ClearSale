@@ -43,7 +43,7 @@ This flow is responsible for demonstrating the integration between the client an
 
 * (A) The store sends a risk analysis request, informing the purchase data and the buyer information.
 * (B) ClearSale processes the request.
-* (C) ClearSale responds the request.
+* (C) ClearSale responds to the request.
 * (D) If the response (C) is approved, the store should perform the billing request.
 * (D) If the response (C) is rejected, the store must not perform the billing request.
 * (D) If the response (C) is awaiting approval, the store should conduct further verifications on the ClearSale
@@ -114,7 +114,7 @@ $clearSale->updateOrderStatusId($orderId, \ClearSale\ClearSaleAnalysis::REPROVAD
 
 ## Documentation
 
-You can find the ClearSale documentation for integrating in the docs](docs) directory.
+You can find the ClearSale documentation for integrating in the [docs](docs) directory.
 
 ## Examples
 
