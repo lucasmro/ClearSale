@@ -1,5 +1,13 @@
 # API ClearSale
 
+**To read the documentation in English, please access the [README.eng.md](README.eng.md) file.**
+
+[![Build Status](https://travis-ci.org/lucasmro/ClearSale.png)](https://travis-ci.org/lucasmro/ClearSale)
+[![Latest Stable Version](https://poser.pugx.org/lucasmro/clearsale/v/stable)](https://packagist.org/packages/lucasmro/clearsale)
+[![Total Downloads](https://poser.pugx.org/lucasmro/clearsale/downloads)](https://packagist.org/packages/lucasmro/clearsale)
+[![Latest Unstable Version](https://poser.pugx.org/lucasmro/clearsale/v/unstable)](https://packagist.org/packages/lucasmro/clearsale)
+[![License](https://poser.pugx.org/lucasmro/clearsale/license)](https://packagist.org/packages/lucasmro/clearsale)
+
 API de integração com a ClearSale.
 
 ## O que é ClearSale?
@@ -13,11 +21,18 @@ PHP 5.3+
 
 ## Instalação
 
-A maneira mais fácil de instalar a biblioteca é através do Composer.
+A maneira mais fácil de instalar a biblioteca é através do [Composer](http://getcomposer.org/).
 
-TODO: Cadastrar a biblioteca no packagist
+```JSON
+{
+    "require": {
+        "lucasmro/clearsale": "dev-master"
+    }
+}
+```
 
 ## Fluxo de integração
+
 Este fluxo é responsável por demonstrar a integração entre o cliente e a ClearSale:
 
     Loja                                                                 ClearSale
@@ -36,14 +51,10 @@ Este fluxo é responsável por demonstrar a integração entre o cliente e a Cle
 * (D) Caso a resposta de (C) seja aguardando aprovação, a loja deverá realizar novas consultas na plataforma na
 ClearSale até que o status da análise mude para aprovado ou reprovado.
 
-TODO: Separar o fluxo para demonstrar melhor os 3 cenários acima.
-
 ## Utilização
 
 Será necessário possuir o EntityCode fornecido pela ClearSale para poder realizar as requisições nos ambientes de
 homologação e produção.
-
-TODO: Renomear as referências no código de staging para sandbox
 
 O trecho de código abaixo é um exemplo básico de como realizar a solicitação de análise de risco:
 
@@ -53,19 +64,20 @@ try {
     $order = new \ClearSale\Order();
     $order->setFingerPrint($fingerPrint)
         ->setId($orderId)
-        ->setDate(time(), true)
+        ->setDate($date)
         ->setEmail($email)
-        ->setDeliveryTime($deliveryTime)
-        ->setShippingPrice($price)
         ->setTotalItems($totalItems)
         ->setTotalOrder($orderTotal)
+        ->setQuantityInstallments($quantityInstallments);
+        ->setIp($ip);
+        ->setOrigin($origin);
         ->setBillingData($customer)
         ->setShippingData($customer)
         ->setItems($items)
         ->setPayments($payments);
 
-    // Cria-se o objeto do ambiente
-    $environment = new \ClearSale\Environment\Sandbox('CLEARSALE_ENTITY_CODE');
+    // Definir ambiente
+    $environment = new \ClearSale\Environment\Sandbox('<CLEARSALE_ENTITY_CODE>');
 
     // Solicitação de análise
     $clearSale = new \ClearSale\ClearSaleAnalysis($environment);
@@ -76,15 +88,12 @@ try {
     {
         case \ClearSale\ClearSaleAnalysis::APROVADO:
             // Análise aprovou a cobrança, realizar o pagamento
-
             break;
         case \ClearSale\ClearSaleAnalysis::REPROVADO:
             // Análise não aprovou a cobrança
-
             break;
         case \ClearSale\ClearSaleAnalysis::AGUARDANDO_APROVACAO:
             // Análise pendente de aprovação manual
-
             break;
     }
 } catch (\Exception $e) {
@@ -92,24 +101,28 @@ try {
 }
 ```
 
-TODO: Substituir a string de environment pela instância de um objeto. Ex: new Sandbox() ou new Production().
-
 Após realizar a requisição de cobrança, deve-se informar a ClearSale sobre o status do processamento do pagamento.
 
 * Se a cobrança for autorizada:
 
 ```PHP
-$clearSale->updateOrderStatusId($orderId, ClearSaleAnalysis::APROVADO);
+$clearSale->updateOrderStatusId($orderId, \ClearSale\ClearSaleAnalysis::APROVADO);
 ```
 
 * Se a cobrança não for autorizada:
 
 ```PHP
-$clearSale->updateOrderStatusId($orderId, ClearSaleAnalysis::REPROVADO);
+$clearSale->updateOrderStatusId($orderId, \ClearSale\ClearSaleAnalysis::REPROVADO);
 ```
 
-## Licença de uso
+## Documentação
 
-Esta biblioteca segue os termos de uso ????.
+Você pode encontrar a documentação de integração da ClearSale no diretório [docs](docs).
 
-TODO: Qual licença utilizar?
+## Exemplos
+
+Você pode encontrar alguns exemplos prontos para uso no diretório [examples](examples).
+
+* [Exemplo de pedido de E-Commerce](examples/ecommerce-order-example.php)
+
+* [Exemplo de pedido de Passagem Aérea](examples/airline-ticket-order-example.php)

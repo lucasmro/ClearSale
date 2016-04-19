@@ -9,53 +9,39 @@ use XMLWriter;
 
 class HotelReservation implements XmlEntityInterface
 {
-    /**
-     *
-     * @var string
-     */
     private $hotel;
-
-    /**
-     *
-     * @var string
-     */
     private $city;
-
-    /**
-     *
-     * @var string
-     */
     private $state;
-
-    /**
-     *
-     * @var string
-     */
     private $country;
-
-    /**
-     *
-     * @var DateTime
-     */
     private $reservationDate;
-
-    /**
-     *
-     * @var DateTime
-     */
     private $reservationExpirationDate;
-
-    /**
-     *
-     * @var DateTime
-     */
     private $checkInDate;
-
-    /**
-     *
-     * @var DateTime
-     */
     private $checkOutDate;
+
+    public static function create(
+        $hotel,
+        $city,
+        $state,
+        $country,
+        DateTime $reservationDate,
+        DateTime $reservationExpirationDate,
+        DateTime $checkInDate,
+        DateTime $checkOutDate
+    ) {
+        $hotelReservation = new self();
+
+        $hotelReservation
+            ->setHotel($hotel)
+            ->setCity($city)
+            ->setState($state)
+            ->setCountry($country)
+            ->setReservationDate($reservationDate)
+            ->setReservationExpirationDate($reservationExpirationDate)
+            ->setCheckInDate($checkInDate)
+            ->setCheckOutDate($checkOutDate);
+
+        return $hotelReservation;
+    }
 
     /**
      *

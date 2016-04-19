@@ -10,12 +10,12 @@ use XMLWriter;
 
 class Passenger implements XmlEntityInterface
 {
-    const DOCUMENT_TYPE_CPF            = 1;
-    const DOCUMENT_TYPE_CNPJ           = 2;
-    const DOCUMENT_TYPE_RG             = 3;
-    const DOCUMENT_TYPE_IE             = 4;
-    const DOCUMENT_TYPE_PASSAPORTE     = 5;
-    const DOCUMENT_TYPE_CTPS           = 6;
+    const DOCUMENT_TYPE_CPF = 1;
+    const DOCUMENT_TYPE_CNPJ = 2;
+    const DOCUMENT_TYPE_RG = 3;
+    const DOCUMENT_TYPE_IE = 4;
+    const DOCUMENT_TYPE_PASSAPORTE = 5;
+    const DOCUMENT_TYPE_CTPS = 6;
     const DOCUMENT_TYPE_TITULO_ELEITOR = 7;
 
     private $documentTypes = array(
@@ -34,15 +34,13 @@ class Passenger implements XmlEntityInterface
     private $legalDocument;
     private $birthDate;
 
-    public static function create($name, $legalDocumentType, $legalDocument, DateTime $birthDate = null, $frequentFlyerCard = null)
+    public static function create($name, $legalDocumentType, $legalDocument)
     {
         $passenger = new self();
         $passenger
             ->setName($name)
             ->setLegalDocumentType($legalDocumentType)
-            ->setLegalDocument($legalDocument)
-            ->setFrequentFlyerCard($frequentFlyerCard)
-            ->setBirthDate($birthDate);
+            ->setLegalDocument($legalDocument);
 
         return $passenger;
     }

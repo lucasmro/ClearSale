@@ -1,0 +1,77 @@
+<ClearSale>
+ <Orders>
+  <Order>
+   <FingerPrint>
+    <SessionID>session-id-1234</SessionID>
+   </FingerPrint>
+   <ID>TEST-b8e8eb55423b73e2e8e6bf42961aebbb</ID>
+   <Date>2016-04-13T23:39:07</Date>
+   <Email>cliente@clearsale.com.br</Email>
+   <TotalItems>10</TotalItems>
+   <TotalOrder>17.5</TotalOrder>
+   <QtyInstallments>1</QtyInstallments>
+   <IP>127.0.0.1</IP>
+   <Origin>WEB</Origin>
+   <BillingData>
+    <ID>1</ID>
+    <Type>1</Type>
+    <LegalDocument1>63165236372</LegalDocument1>
+    <Name>Fulano da Silva</Name>
+    <Address>
+     <Street>Rua José de Oliveira Coutinho</Street>
+     <Number>151</Number>
+     <County>Barra Funda</County>
+     <City>São Paulo</City>
+     <State>SP</State>
+     <Country>Brasil</Country>
+     <ZipCode>01144020</ZipCode>
+    </Address>
+    <Phones>
+     <Phone>
+      <Type>2</Type>
+      <DDD>11</DDD>
+      <Number>37288788</Number>
+     </Phone>
+    </Phones>
+    <BirthDate>1980-01-01T00:00:00</BirthDate>
+   </BillingData>
+   <ShippingData>
+    <ID>1</ID>
+    <Type>1</Type>
+    <LegalDocument1>63165236372</LegalDocument1>
+    <Name>Fulano da Silva</Name>
+    <Address>
+     <Street>Rua José de Oliveira Coutinho</Street>
+     <Number>151</Number>
+     <County>Barra Funda</County>
+     <City>São Paulo</City>
+     <State>SP</State>
+     <Country>Brasil</Country>
+     <ZipCode>01144020</ZipCode>
+    </Address>
+    <Phones>
+     <Phone>
+      <Type>2</Type>
+      <DDD>11</DDD>
+      <Number>37288788</Number>
+     </Phone>
+    </Phones>
+   </ShippingData>
+   <Payments>
+    <Payment>
+     <Date>2016-04-13T23:39:07</Date>
+     <Amount>17.5</Amount>
+     <PaymentTypeID>2</PaymentTypeID>
+    </Payment>
+   </Payments>
+   <Items>
+    <Item>
+     <ID>1</ID>
+     <Name>Adaptador USB</Name>
+     <ItemValue>10</ItemValue>
+     <Qty>1</Qty>
+    </Item>
+   </Items>
+  </Order>
+ </Orders>
+</ClearSale>
