@@ -2,7 +2,27 @@
 
 date_default_timezone_set('America/Sao_Paulo');
 
-require __DIR__.'/../vendor/autoload.php';
+// FIX: MOZG
+
+$depth = 3;
+$path = dirname(__FILE__);
+for( $d=1 ; $d <= $depth ; $d++ ){
+    $path = dirname($path);
+}
+$vendorModuleDir = $path;
+
+$autoload_path = $vendorModuleDir . '/autoload.php';
+
+//print_r($autoload_path);
+
+$included = include $autoload_path;
+
+if (!$included) {
+    echo 'Falha no carregamento do autoload';
+    exit(1);
+}
+
+// FIX: MOZG
 
 use ClearSale\ClearSaleAnalysis;
 use ClearSale\Environment\Sandbox;
