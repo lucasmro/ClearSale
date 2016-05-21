@@ -7,9 +7,9 @@ $path = dirname(__FILE__);
 for( $d=1 ; $d <= $depth ; $d++ ) {
     $path = dirname($path);
 }
-$vendorModuleDir = $path;
+$vendorDir = $path;
 
-$autoload_path = $vendorModuleDir . '/autoload.php';
+$autoload_path = $vendorDir . '/autoload.php';
 
 $included = include $autoload_path;
 
