@@ -17,6 +17,7 @@ class Card implements XmlEntityInterface
     const AURA             = 7;
 
     private static $cards = array(
+        self::DINERS,
         self::MASTERCARD,
         self::VISA,
         self::OUTROS,
@@ -43,7 +44,7 @@ class Card implements XmlEntityInterface
 
     public function setType($type)
     {
-        if (!array_key_exists($type, self::$cards)) {
+        if (!in_array($type, self::$cards)) {
             throw new InvalidArgumentException(sprintf('Invalid type (%s)', $type));
         }
 
