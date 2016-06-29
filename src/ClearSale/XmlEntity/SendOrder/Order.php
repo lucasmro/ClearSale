@@ -598,7 +598,7 @@ class Order
      */
     public function getBillingData()
     {
-        return $this->billingData;
+        return $this->customerBillingData;
     }
 
     /**
@@ -619,7 +619,7 @@ class Order
      */
     public function getShippingData()
     {
-        return $this->shippingData;
+        return $this->customerShippingData;
     }
 
     /**
