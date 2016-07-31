@@ -105,7 +105,7 @@ class Item implements XmlEntityInterface
 
     public function isGift()
     {
-        return $this->giftTypeId;
+        return $this->isGift;
     }
 
     public function setGift($gift)
