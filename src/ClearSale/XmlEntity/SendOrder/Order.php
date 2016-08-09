@@ -555,7 +555,7 @@ class Order
 
     public function setProduct($product)
     {
-        if (!array_key_exists($product, self::$products)) {
+        if (!in_array($product, self::$products)) {
             throw new InvalidArgumentException(sprintf('Invalid product type (%s)', $product));
         }
 
