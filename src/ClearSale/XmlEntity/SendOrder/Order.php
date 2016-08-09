@@ -571,7 +571,7 @@ class Order
 
     public function setListType($listType)
     {
-        if (!array_key_exists($listType, self::$listTypes)) {
+        if (!in_array($listType, self::$listTypes)) {
             throw new InvalidArgumentException(sprintf('Invalid list type (%s)', $listType));
         }
 
