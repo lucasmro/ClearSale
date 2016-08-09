@@ -322,7 +322,7 @@ class Order
 
     public function setEcommerceType($ecommerceType)
     {
-        if (!array_key_exists($ecommerceType, self::$ecommerceTypes)) {
+        if (!in_array($ecommerceType, self::$ecommerceTypes)) {
             throw new InvalidArgumentException(sprintf('Invalid ecommerce type (%s)', $ecommerceType));
         }
 
