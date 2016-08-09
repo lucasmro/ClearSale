@@ -470,7 +470,7 @@ class Order
 
     public function setStatus($status)
     {
-        if (!array_key_exists($status, self::$statuses)) {
+        if (!in_array($status, self::$statuses)) {
             throw new InvalidArgumentException(sprintf('Invalid status (%s)', $status));
         }
 
