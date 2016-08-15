@@ -322,7 +322,7 @@ class Order
 
     public function setEcommerceType($ecommerceType)
     {
-        if (!array_key_exists($ecommerceType, self::$ecommerceTypes)) {
+        if (!in_array($ecommerceType, self::$ecommerceTypes)) {
             throw new InvalidArgumentException(sprintf('Invalid ecommerce type (%s)', $ecommerceType));
         }
 
@@ -470,7 +470,7 @@ class Order
 
     public function setStatus($status)
     {
-        if (!array_key_exists($status, self::$statuses)) {
+        if (!in_array($status, self::$statuses)) {
             throw new InvalidArgumentException(sprintf('Invalid status (%s)', $status));
         }
 
@@ -555,7 +555,7 @@ class Order
 
     public function setProduct($product)
     {
-        if (!array_key_exists($product, self::$products)) {
+        if (!in_array($product, self::$products)) {
             throw new InvalidArgumentException(sprintf('Invalid product type (%s)', $product));
         }
 
@@ -571,7 +571,7 @@ class Order
 
     public function setListType($listType)
     {
-        if (!array_key_exists($listType, self::$listTypes)) {
+        if (!in_array($listType, self::$listTypes)) {
             throw new InvalidArgumentException(sprintf('Invalid list type (%s)', $listType));
         }
 
