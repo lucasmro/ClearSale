@@ -57,13 +57,11 @@ class Address implements XmlEntityInterface
 
     public function setNumber($number)
     {
-        $number = preg_replace('/[^0-9]/', '', $number);
-
         if (empty($number)) {
             throw new InvalidArgumentException('Number is empty!');
         }
 
-        $this->number = $number;
+        $this->number = "$number";
 
         return $this;
     }
