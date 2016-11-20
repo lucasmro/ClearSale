@@ -133,10 +133,6 @@ class Address implements XmlEntityInterface
 
     public function setCountry($country)
     {
-        if (empty($country)) {
-            throw new InvalidArgumentException('Country is empty!');
-        }
-
         $this->country = $country;
 
         return $this;
