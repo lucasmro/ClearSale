@@ -61,7 +61,7 @@ class Address implements XmlEntityInterface
             throw new InvalidArgumentException('Number is empty!');
         }
 
-        $this->number = "$number";
+        $this->number = (string)$number;
 
         return $this;
     }
