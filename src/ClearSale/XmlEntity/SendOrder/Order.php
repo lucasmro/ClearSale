@@ -696,7 +696,7 @@ class Order
     public function setItems($items)
     {
         foreach ($items as $item) {
-            $this->addItems($item);
+            $this->addItem($item);
         }
 
         return $this;
