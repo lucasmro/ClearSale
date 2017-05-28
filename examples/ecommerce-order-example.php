@@ -2,7 +2,21 @@
 
 date_default_timezone_set('America/Sao_Paulo');
 
-require __DIR__.'/../vendor/autoload.php';
+$depth = 3;
+$path = dirname(__FILE__);
+for( $d=1 ; $d <= $depth ; $d++ ) {
+    $path = dirname($path);
+}
+$vendorDir = $path;
+
+$autoload_path = $vendorDir . '/autoload.php';
+
+$included = include $autoload_path;
+
+if (!$included) {
+    echo 'Falha no carregamento do autoload';
+    exit(1);
+}
 
 use ClearSale\ClearSaleAnalysis;
 use ClearSale\Environment\Sandbox;
