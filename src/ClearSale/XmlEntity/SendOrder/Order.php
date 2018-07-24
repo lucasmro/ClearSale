@@ -944,7 +944,9 @@ class Order
             $this->customerShippingData->toXML($xml);
         }
 
-        if (count($this->payments) > 0) {
+        $paymentsCount = (is_array($this->payments) ? count($this->payments) : 0);
+
+        if ($paymentsCount > 0) {
             $xml->startElement("Payments");
 
             foreach ($this->payments as $payment) {
@@ -954,7 +956,9 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->items) > 0) {
+        $itemsCount = (is_array($this->items) ? count($this->items) : 0);
+
+        if ($itemsCount > 0) {
             $xml->startElement("Items");
 
             foreach ($this->items as $item) {
@@ -964,7 +968,9 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->passengers) > 0) {
+        $passengersCount = (is_array($this->passengers) ? count($this->passengers) : 0);
+
+        if ($passengersCount > 0) {
             $xml->startElement("Passengers");
 
             foreach ($this->passengers as $passenger) {
@@ -974,7 +980,9 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->connections) > 0) {
+        $connectionsCount = (is_array($this->connections) ? count($this->connections) : 0);
+
+        if ($connectionsCount > 0) {
             $xml->startElement("Connections");
 
             foreach ($this->connections as $connection) {
@@ -984,7 +992,9 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->hotelReservations) > 0) {
+        $hotelReservationsCount = (is_array($this->hotelReservations) ? count($this->hotelReservations) : 0);
+
+        if ($hotelReservationsCount > 0) {
             $xml->startElement("HotelReservations");
 
             foreach ($this->hotelReservations as $hotelReservation) {

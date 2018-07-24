@@ -337,7 +337,9 @@ abstract class AbstractCustomer implements XmlEntityInterface
             $this->address->toXML($xml);
         }
 
-        if (count($this->phones) > 0) {
+        $phonesCount = (is_array($this->phones) ? count($this->phones) : 0);
+
+        if ($phonesCount > 0) {
             $xml->startElement("Phones");
 
             foreach ($this->phones as $phone) {

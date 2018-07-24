@@ -1,8 +1,8 @@
 {
-    "name": "lucasmro/clearsale",
+    "name": "bubbstore/clearsale",
     "description": "ClearSale Integration",
     "keywords": ["ClearSale", "T-ClearSale", "TG-ClearSale", "A-ClearSale"],
-    "homepage": "http://github.com/lucasmro/ClearSale",
+    "homepage": "http://github.com/bubbstore/ClearSale",
     "license": "MIT",
     "authors": [
         {
