@@ -964,7 +964,7 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->passengers) > 0) {
+        if ($this->passengers) {
             $xml->startElement("Passengers");
 
             foreach ($this->passengers as $passenger) {
@@ -974,7 +974,7 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->connections) > 0) {
+        if ($this->connections) {
             $xml->startElement("Connections");
 
             foreach ($this->connections as $connection) {
@@ -984,7 +984,7 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->hotelReservations) > 0) {
+        if ($this->hotelReservations) {
             $xml->startElement("HotelReservations");
 
             foreach ($this->hotelReservations as $hotelReservation) {

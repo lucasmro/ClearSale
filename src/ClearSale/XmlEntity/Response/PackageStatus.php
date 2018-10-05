@@ -35,7 +35,7 @@ class PackageStatus
 
         // Convert string to SimpleXMLElement
         $object = simplexml_load_string($xml);
-
+		
         // Convert SimpleXMLElement to stdClass
         $object = json_decode(json_encode($object));
 
@@ -51,7 +51,7 @@ class PackageStatus
             $this->order = new OrderReturn(
                 $object->Orders->Order->ID,
                 $object->Orders->Order->Status,
-                $object->Orders->Order->Score
+                !is_object($object->Orders->Order->Score) ? $object->Orders->Order->Score : ''
             );
         }
     }
