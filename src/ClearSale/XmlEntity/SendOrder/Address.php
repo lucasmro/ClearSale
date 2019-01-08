@@ -19,7 +19,7 @@ class Address implements XmlEntityInterface
     private $zipCode;
     private $reference;
 
-    public static function create($street, $number, $county, $country, $city, $state, $zipCode)
+    public static function create($street, $number, $county, $country, $city, $state, $zipCode, $complement = '')
     {
         $instance = new self();
 
@@ -30,6 +30,10 @@ class Address implements XmlEntityInterface
         $instance->setCity($city);
         $instance->setState($state);
         $instance->setZipCode($zipCode);
+
+        if (!empty($complement)) {
+            $instance->setComplement($complement);
+        }
 
         return $instance;
     }
