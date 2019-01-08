@@ -22,12 +22,14 @@ class Order
     const STATUS_APROVADO = 9;
     const STATUS_CANCELADO = 41;
     const STATUS_REPROVADO = 45;
+    const STATUS_CARTAO_RECUSADO = 27;
 
     private static $statuses = array(
         self::STATUS_NOVO,
         self::STATUS_APROVADO,
         self::STATUS_CANCELADO,
         self::STATUS_REPROVADO,
+        self::STATUS_CARTAO_RECUSADO
     );
 
     const PRODUCT_A_CLEAR_SALE = 1;
