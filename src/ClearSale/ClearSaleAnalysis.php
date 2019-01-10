@@ -134,6 +134,7 @@ class ClearSaleAnalysis
             case OrderReturn::STATUS_SAIDA_FRAUDE_CONFIRMADA:
             case OrderReturn::STATUS_SAIDA_REPROVACAO_AUTOMATICA:
             case OrderReturn::STATUS_SAIDA_REPROVACAO_POR_POLITICA:
+            case OrderReturn::STATUS_SAIDA_SUSPENSAO_MANUAL:
                 return true;
             default:
                 return false;
@@ -145,7 +146,6 @@ class ClearSaleAnalysis
         switch ($packageStatus->getOrder()->getStatus()) {
             case OrderReturn::STATUS_SAIDA_ANALISE_MANUAL:
             case OrderReturn::STATUS_SAIDA_NOVO:
-            case OrderReturn::STATUS_SAIDA_SUSPENSAO_MANUAL:                
                 return true;
             default:
                 return false;
