@@ -92,6 +92,7 @@ class Order
     private $status;
     private $reanalysis;
     private $origin;
+    private $generics;
     private $reservationDate;
     private $country;
     private $nationality;
@@ -506,6 +507,36 @@ class Order
     }
 
     /**
+     * @return Generic[]
+     */
+    public function getGenerics()
+    {
+        return $this->generics;
+    }
+
+    /**
+     * @param $generics
+     * @return Order
+     */
+    public function setGenerics($generics)
+    {
+        $this->generics = [];
+        foreach ($generics as $generic) {
+            $this->addGeneric($generic);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Generic $generic
+     */
+    private function addGeneric(Generic $generic)
+    {
+        $this->generics[] = $generic;
+    }
+
+    /**
      *
      * @return DateTime
      */
@@ -912,6 +943,16 @@ class Order
             $xml->writeElement("Origin", $this->origin);
         } else {
             throw new RequiredFieldException('Field Origin of the Order object is required');
+        }
+
+        if (count($this->generics) > 0) {
+            $xml->startElement("Generics");
+
+            foreach ($this->generics as $generic) {
+                $generic->toXML($xml);
+            }
+
+            $xml->endElement();
         }
 
         if ($this->reservationDate) {
