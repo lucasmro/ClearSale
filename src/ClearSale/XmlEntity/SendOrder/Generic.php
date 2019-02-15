@@ -64,7 +64,7 @@ class Generic implements XmlEntityInterface
             $xml->writeElement("Name", $this->name);
         }
 
-        if ($this->value) {
+        if ($this->value || in_array($this->value, [0, "0"])) {
             $xml->writeElement("Value", $this->value);
         }
 
