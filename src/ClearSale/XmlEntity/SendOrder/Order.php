@@ -881,13 +881,13 @@ class Order
             $xml->writeElement("ShippingPrice", $this->shippingPrice);
         }
 
-        if ($this->totalItems) {
+        if ($this->totalItems || in_array($this->value, [0, "0"])) {
             $xml->writeElement("TotalItems", $this->totalItems);
         } else {
             throw new RequiredFieldException('Field TotalItems of the Order object is required');
         }
 
-        if ($this->totalOrder) {
+        if ($this->totalOrder || in_array($this->value, [0, "0"])) {
             $xml->writeElement("TotalOrder", $this->totalOrder);
         } else {
             throw new RequiredFieldException('Field TotalOrder of the Order object is required');

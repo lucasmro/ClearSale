@@ -252,7 +252,7 @@ class Payment implements XmlEntityInterface
             throw new RequiredFieldException('Field Date of the Payment object is required');
         }
 
-        if ($this->amount) {
+        if ($this->amount || in_array($this->value, [0, "0"])) {
             $xml->writeElement("Amount", $this->amount);
         } else {
             throw new RequiredFieldException('Field Amount of the Payment object is required');
