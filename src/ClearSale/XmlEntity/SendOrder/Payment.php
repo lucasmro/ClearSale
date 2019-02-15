@@ -11,20 +11,20 @@ use XMLWriter;
 
 class Payment implements XmlEntityInterface
 {
-    const CARTAO_CREDITO           = 1;
-    const BOLETO_BANCARIO          = 2;
-    const DEBITO_BANCARIO          = 3;
+    const CARTAO_CREDITO = 1;
+    const BOLETO_BANCARIO = 2;
+    const DEBITO_BANCARIO = 3;
     const DEBITO_BANCARIO_DINHEIRO = 4;
-    const DEBITO_BANCARIO_CHEQUE   = 5;
-    const TRANSFERENCIA_BANCARIA   = 6;
-    const SEDEX_A_COBRAR           = 7;
-    const CHEQUE                   = 8;
-    const DINHEIRO                 = 9;
-    const FINANCIAMENTO            = 10;
-    const FATURA                   = 11;
-    const CUPOM                    = 12;
-    const MULTICHEQUE              = 13;
-    const OUTROS                   = 14;
+    const DEBITO_BANCARIO_CHEQUE = 5;
+    const TRANSFERENCIA_BANCARIA = 6;
+    const SEDEX_A_COBRAR = 7;
+    const CHEQUE = 8;
+    const DINHEIRO = 9;
+    const FINANCIAMENTO = 10;
+    const FATURA = 11;
+    const CUPOM = 12;
+    const MULTICHEQUE = 13;
+    const OUTROS = 14;
 
     private static $paymentTypes = array(
         self::CARTAO_CREDITO,
@@ -106,7 +106,7 @@ class Payment implements XmlEntityInterface
     }
 
     /**
-     * 
+     *
      * @param DateTime $date
      * @return Payment
      */
@@ -252,7 +252,7 @@ class Payment implements XmlEntityInterface
             throw new RequiredFieldException('Field Date of the Payment object is required');
         }
 
-        if ($this->amount) {
+        if (is_numeric($this->amount)) {
             $xml->writeElement("Amount", $this->amount);
         } else {
             throw new RequiredFieldException('Field Amount of the Payment object is required');
