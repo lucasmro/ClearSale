@@ -167,7 +167,7 @@ class Item implements XmlEntityInterface
             throw new RequiredFieldException('Field Name of the Payment object is required');
         }
 
-        if ($this->value || in_array($this->value, [0, "0"])) {
+        if (is_numeric($this->value)) {
             $xml->writeElement("ItemValue", $this->value);
         } else {
             throw new RequiredFieldException('Field ItemValue of the Payment object is required');
@@ -180,7 +180,7 @@ class Item implements XmlEntityInterface
         }
 
         if ($this->isGift) {
-            $xml->writeElement("GiftTypeID", (int) $this->isGift);
+            $xml->writeElement("GiftTypeID", (int)$this->isGift);
         }
 
         if ($this->categoryId) {
