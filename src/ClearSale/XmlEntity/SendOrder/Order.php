@@ -850,8 +850,6 @@ class Order
 
         if ($this->totalItems) {
             $xml->writeElement("TotalItems", $this->totalItems);
-        } else {
-            throw new RequiredFieldException('Field TotalItems of the Order object is required');
         }
 
         if ($this->totalOrder) {
