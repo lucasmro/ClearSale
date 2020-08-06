@@ -103,6 +103,7 @@ class Order
     private $passengers;
     private $connections;
     private $hotelReservations;
+	private $shippingType;
 
     /**
      * @param FingerPrint $fingerPrint
@@ -805,6 +806,18 @@ class Order
 
         return $this;
     }
+	
+	public function getShippingType()
+    {
+        return $this->shippingType;
+    }
+
+    public function setShippingType($shippingType)
+    {
+        $this->shippingType = $shippingType;
+
+        return $this;
+    }
 
     public function toXML($prettyPrint = false)
     {
@@ -882,7 +895,9 @@ class Order
             throw new RequiredFieldException('Field IP of the Order object is required');
         }
 
-        // TODO: ShippingType not implemented
+        if ($this->shippingType) {
+            $xml->writeElement("ShippingType", $this->shippingType);
+        }
 
         if ($this->gift) {
             $xml->writeElement("Gift", $this->gift);
