@@ -35,13 +35,7 @@ A maneira mais fácil de instalar a biblioteca é através do [Composer](http://
 
 Este fluxo é responsável por demonstrar a integração entre o cliente e a ClearSale:
 
-    Loja                                                                 ClearSale
-     |                                                                       |
-     |----- (A) solicitação de análise de risco (sendOrders) --------------->|
-     |                                                                       | (B) realiza processamento
-     |<---- (C) envia resposta ----------------------------------------------|
-     |                                                                       |
-     |----- (D) realiza a cobrança / cancela a compra / tenta novamente ---->|
+![image](https://user-images.githubusercontent.com/16373553/91900022-68648100-ec74-11ea-974d-115367443bd6.png)
 
 * (A) A loja realiza uma solicitação de análise de risco, informando os dados da compra e do comprador.
 * (B) A ClearSale processa a requisição.
