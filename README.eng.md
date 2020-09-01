@@ -33,13 +33,7 @@ The easiest way to install the library is through [Composer](http://getcomposer.
 
 This flow is responsible for demonstrating the integration between the client and ClearSale:
 
-    Store                                                                 ClearSale
-     |                                                                       |
-     |----- (A) risk analysis request (sendOrders) ------------------------->|
-     |                                                                       | (B) performs processing
-     |<---- (C) sends response ----------------------------------------------|
-     |                                                                       |
-     |----- (D) performs billing / cancel the purchase / try again --------->|
+![image](https://user-images.githubusercontent.com/16373553/91900452-1b34df00-ec75-11ea-9d82-572f3668c3ae.png)
 
 * (A) The store sends a risk analysis request, informing the purchase data and the buyer information.
 * (B) ClearSale processes the request.
