@@ -151,4 +151,19 @@ class ClearSaleAnalysis
                 return false;
         }
     }
+
+    public function getResultOrderStatus($orderID) {
+
+        return $this->clearSaleService->getResultOrderStatus($orderID);
+
+    }
+
+    public function isAccessAccountValid(): bool
+    {
+
+        $resultRequest = $this->getResultOrderStatus(rand(0, 2));
+
+        return $resultRequest->StatusCode != "UserNotFound";
+
+    }
 }
