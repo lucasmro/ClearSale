@@ -6,6 +6,7 @@ class PackageStatus
 {
     const STATUS_CODE_TRANSACAO_CONCLUIDA = '00';
     const STATUS_CODE_USUARIO_INEXISTENTE = '01';
+    const STATUS_CODE_USUARIO_INEXISTENTE2 = 'UserNotFound';
     const STATUS_CODE_ERRO_VALIDACAO_XML = '02';
     const STATUS_CODE_ERRO_TRANFORMACAO_XML = '03';
     const STATUS_CODE_ERRO_INESPERADO = '04';
@@ -15,6 +16,7 @@ class PackageStatus
 
     private static $statusCodeExceptions = array(
         self::STATUS_CODE_USUARIO_INEXISTENTE => 'ClearSale\Exception\UserNotFoundException',
+        self::STATUS_CODE_USUARIO_INEXISTENTE2 => 'ClearSale\Exception\UserNotFoundException',
         self::STATUS_CODE_ERRO_VALIDACAO_XML => 'ClearSale\Exception\XmlValidationException',
         self::STATUS_CODE_ERRO_TRANFORMACAO_XML => 'ClearSale\Exception\XmlTransformException',
         self::STATUS_CODE_ERRO_INESPERADO => 'ClearSale\Exception\UnexpectedErrorException',
@@ -103,12 +105,18 @@ class PackageStatus
             return;
         }
 
-        if (self::STATUS_CODE_USUARIO_INEXISTENTE === $this->getStatusCode()) {
+        if (in_array($this->getStatusCode(), [self::STATUS_CODE_USUARIO_INEXISTENTE, self::STATUS_CODE_USUARIO_INEXISTENTE2])) {
             $this->setMessage('User with the entity code given not found');
         }
 
         $exceptionClass = static::$statusCodeExceptions[$this->getStatusCode()];
 
-        throw new $exceptionClass($this->getMessage(), $this->getStatusCode());
+        $statusCode = $this->getStatusCode();
+        if ($statusCode == self::STATUS_CODE_USUARIO_INEXISTENTE2){
+            $statusCode = self::STATUS_CODE_USUARIO_INEXISTENTE;
+        }
+
+        throw new $exceptionClass($this->getMessage(), $statusCode);
+
     }
 }
