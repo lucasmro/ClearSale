@@ -75,7 +75,7 @@ class Payment implements XmlEntityInterface
 
     public function setType($type)
     {
-        if (!array_key_exists($type, self::$paymentTypes)) {
+        if (!in_array($type, self::$paymentTypes, true)) {
             throw new InvalidArgumentException(sprintf('Invalid payment type (%s)', $type));
         }
 

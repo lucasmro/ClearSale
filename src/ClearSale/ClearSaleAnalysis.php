@@ -61,7 +61,7 @@ class ClearSaleAnalysis
     public function getOrderStatus($orderId)
     {
         $this->packageStatusResponse = $this->clearSaleService->getOrderStatus($orderId);
-
+        
         // TODO: Implement log -> $this->packageStatusResponse->getOrder()->getStatus()
         // TODO: Implement log -> $this->packageStatusResponse->getOrder()->getScore()
 
@@ -150,5 +150,20 @@ class ClearSaleAnalysis
             default:
                 return false;
         }
+    }
+
+    public function getResultOrderStatus($orderID) {
+
+        return $this->clearSaleService->getResultOrderStatus($orderID);
+
+    }
+
+    public function isAccessAccountValid(): bool
+    {
+
+        $resultRequest = $this->getResultOrderStatus(rand(0, 2));
+
+        return $resultRequest->StatusCode != "UserNotFound";
+
     }
 }
