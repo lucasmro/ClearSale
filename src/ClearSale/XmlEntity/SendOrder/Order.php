@@ -22,12 +22,14 @@ class Order
     const STATUS_APROVADO = 9;
     const STATUS_CANCELADO = 41;
     const STATUS_REPROVADO = 45;
+    const STATUS_CARTAO_RECUSADO = 27;
 
     private static $statuses = array(
         self::STATUS_NOVO,
         self::STATUS_APROVADO,
         self::STATUS_CANCELADO,
         self::STATUS_REPROVADO,
+        self::STATUS_CARTAO_RECUSADO
     );
 
     const PRODUCT_A_CLEAR_SALE = 1;
@@ -90,6 +92,7 @@ class Order
     private $status;
     private $reanalysis;
     private $origin;
+    private $generics;
     private $reservationDate;
     private $country;
     private $nationality;
@@ -504,6 +507,36 @@ class Order
     }
 
     /**
+     * @return Generic[]
+     */
+    public function getGenerics()
+    {
+        return $this->generics;
+    }
+
+    /**
+     * @param $generics
+     * @return Order
+     */
+    public function setGenerics($generics)
+    {
+        $this->generics = [];
+        foreach ($generics as $generic) {
+            $this->addGeneric($generic);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Generic $generic
+     */
+    private function addGeneric(Generic $generic)
+    {
+        $this->generics[] = $generic;
+    }
+
+    /**
      *
      * @return DateTime
      */
@@ -848,13 +881,13 @@ class Order
             $xml->writeElement("ShippingPrice", $this->shippingPrice);
         }
 
-        if ($this->totalItems) {
+        if (is_numeric($this->totalItems)) {
             $xml->writeElement("TotalItems", $this->totalItems);
         } else {
             throw new RequiredFieldException('Field TotalItems of the Order object is required');
         }
 
-        if ($this->totalOrder) {
+        if (is_numeric($this->totalOrder)) {
             $xml->writeElement("TotalOrder", $this->totalOrder);
         } else {
             throw new RequiredFieldException('Field TotalOrder of the Order object is required');
@@ -910,6 +943,16 @@ class Order
             $xml->writeElement("Origin", $this->origin);
         } else {
             throw new RequiredFieldException('Field Origin of the Order object is required');
+        }
+
+        if (count($this->generics) > 0) {
+            $xml->startElement("Generics");
+
+            foreach ($this->generics as $generic) {
+                $generic->toXML($xml);
+            }
+
+            $xml->endElement();
         }
 
         if ($this->reservationDate) {
