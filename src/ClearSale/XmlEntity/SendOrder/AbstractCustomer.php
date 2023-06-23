@@ -324,6 +324,14 @@ abstract class AbstractCustomer implements XmlEntityInterface
         } else {
             throw new RequiredFieldException('Field name of the Customer object is required');
         }
+        
+        if ($this->type == static::TYPE_PESSOA_FISICA){
+	        if($this->birthDate){
+	        	$xml->writeElement("BirthDate", $this->birthDate->format(Order::DATE_TIME_FORMAT));
+	        } else {
+	        	throw new RequiredFieldException('Field birthDate of the Customer object is required');
+	        }
+        }
 
         if ($this->email) {
             $xml->writeElement("Email", $this->email);

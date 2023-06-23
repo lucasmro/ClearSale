@@ -106,6 +106,7 @@ class Order
     private $passengers;
     private $connections;
     private $hotelReservations;
+	private $shippingType;
 
     /**
      * @param FingerPrint $fingerPrint
@@ -838,6 +839,18 @@ class Order
 
         return $this;
     }
+	
+	public function getShippingType()
+    {
+        return $this->shippingType;
+    }
+
+    public function setShippingType($shippingType)
+    {
+        $this->shippingType = $shippingType;
+
+        return $this;
+    }
 
     public function toXML($prettyPrint = false)
     {
@@ -883,8 +896,6 @@ class Order
 
         if (is_numeric($this->totalItems)) {
             $xml->writeElement("TotalItems", $this->totalItems);
-        } else {
-            throw new RequiredFieldException('Field TotalItems of the Order object is required');
         }
 
         if (is_numeric($this->totalOrder)) {
@@ -917,7 +928,9 @@ class Order
             throw new RequiredFieldException('Field IP of the Order object is required');
         }
 
-        // TODO: ShippingType not implemented
+        if ($this->shippingType) {
+            $xml->writeElement("ShippingType", $this->shippingType);
+        }
 
         if ($this->gift) {
             $xml->writeElement("Gift", $this->gift);
@@ -1007,7 +1020,7 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->passengers) > 0) {
+        if ($this->passengers) {
             $xml->startElement("Passengers");
 
             foreach ($this->passengers as $passenger) {
@@ -1017,7 +1030,7 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->connections) > 0) {
+        if ($this->connections) {
             $xml->startElement("Connections");
 
             foreach ($this->connections as $connection) {
@@ -1027,7 +1040,7 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->hotelReservations) > 0) {
+        if ($this->hotelReservations) {
             $xml->startElement("HotelReservations");
 
             foreach ($this->hotelReservations as $hotelReservation) {
