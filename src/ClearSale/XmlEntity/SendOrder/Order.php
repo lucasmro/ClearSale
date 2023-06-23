@@ -22,12 +22,14 @@ class Order
     const STATUS_APROVADO = 9;
     const STATUS_CANCELADO = 41;
     const STATUS_REPROVADO = 45;
+    const STATUS_CARTAO_RECUSADO = 27;
 
     private static $statuses = array(
         self::STATUS_NOVO,
         self::STATUS_APROVADO,
         self::STATUS_CANCELADO,
         self::STATUS_REPROVADO,
+        self::STATUS_CARTAO_RECUSADO
     );
 
     const PRODUCT_A_CLEAR_SALE = 1;
@@ -90,6 +92,7 @@ class Order
     private $status;
     private $reanalysis;
     private $origin;
+    private $generics;
     private $reservationDate;
     private $country;
     private $nationality;
@@ -103,6 +106,7 @@ class Order
     private $passengers;
     private $connections;
     private $hotelReservations;
+	private $shippingType;
 
     /**
      * @param FingerPrint $fingerPrint
@@ -504,6 +508,36 @@ class Order
     }
 
     /**
+     * @return Generic[]
+     */
+    public function getGenerics()
+    {
+        return $this->generics;
+    }
+
+    /**
+     * @param $generics
+     * @return Order
+     */
+    public function setGenerics($generics)
+    {
+        $this->generics = [];
+        foreach ($generics as $generic) {
+            $this->addGeneric($generic);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Generic $generic
+     */
+    private function addGeneric(Generic $generic)
+    {
+        $this->generics[] = $generic;
+    }
+
+    /**
      *
      * @return DateTime
      */
@@ -805,6 +839,18 @@ class Order
 
         return $this;
     }
+	
+	public function getShippingType()
+    {
+        return $this->shippingType;
+    }
+
+    public function setShippingType($shippingType)
+    {
+        $this->shippingType = $shippingType;
+
+        return $this;
+    }
 
     public function toXML($prettyPrint = false)
     {
@@ -848,13 +894,11 @@ class Order
             $xml->writeElement("ShippingPrice", $this->shippingPrice);
         }
 
-        if ($this->totalItems) {
+        if (is_numeric($this->totalItems)) {
             $xml->writeElement("TotalItems", $this->totalItems);
-        } else {
-            throw new RequiredFieldException('Field TotalItems of the Order object is required');
         }
 
-        if ($this->totalOrder) {
+        if (is_numeric($this->totalOrder)) {
             $xml->writeElement("TotalOrder", $this->totalOrder);
         } else {
             throw new RequiredFieldException('Field TotalOrder of the Order object is required');
@@ -884,7 +928,9 @@ class Order
             throw new RequiredFieldException('Field IP of the Order object is required');
         }
 
-        // TODO: ShippingType not implemented
+        if ($this->shippingType) {
+            $xml->writeElement("ShippingType", $this->shippingType);
+        }
 
         if ($this->gift) {
             $xml->writeElement("Gift", $this->gift);
@@ -910,6 +956,16 @@ class Order
             $xml->writeElement("Origin", $this->origin);
         } else {
             throw new RequiredFieldException('Field Origin of the Order object is required');
+        }
+
+        if (count($this->generics) > 0) {
+            $xml->startElement("Generics");
+
+            foreach ($this->generics as $generic) {
+                $generic->toXML($xml);
+            }
+
+            $xml->endElement();
         }
 
         if ($this->reservationDate) {
@@ -944,7 +1000,9 @@ class Order
             $this->customerShippingData->toXML($xml);
         }
 
-        if (count($this->payments) > 0) {
+        $paymentsCount = (is_array($this->payments) ? count($this->payments) : 0);
+
+        if ($paymentsCount > 0) {
             $xml->startElement("Payments");
 
             foreach ($this->payments as $payment) {
@@ -954,7 +1012,9 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->items) > 0) {
+        $itemsCount = (is_array($this->items) ? count($this->items) : 0);
+
+        if ($itemsCount > 0) {
             $xml->startElement("Items");
 
             foreach ($this->items as $item) {
@@ -964,7 +1024,9 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->passengers) > 0) {
+        $passengersCount = (is_array($this->passengers) ? count($this->passengers) : 0);
+
+        if ($passengersCount > 0) {
             $xml->startElement("Passengers");
 
             foreach ($this->passengers as $passenger) {
@@ -974,7 +1036,9 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->connections) > 0) {
+        $connectionsCount = (is_array($this->connections) ? count($this->connections) : 0);
+
+        if ($connectionsCount > 0) {
             $xml->startElement("Connections");
 
             foreach ($this->connections as $connection) {
@@ -984,7 +1048,9 @@ class Order
             $xml->endElement();
         }
 
-        if (count($this->hotelReservations) > 0) {
+        $hotelReservationsCount = (is_array($this->hotelReservations) ? count($this->hotelReservations) : 0);
+
+        if ($hotelReservationsCount > 0) {
             $xml->startElement("HotelReservations");
 
             foreach ($this->hotelReservations as $hotelReservation) {
